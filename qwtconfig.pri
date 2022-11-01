@@ -1,3 +1,4 @@
+
 ######################################################################
 # Install paths
 ######################################################################
@@ -14,6 +15,7 @@ unix {
 win32 {
     INSTALLBASE    = C:/Qwt-5.2.0
 }
+
 
 target.path    = $$INSTALLBASE/lib
 headers.path   = $$INSTALLBASE/include

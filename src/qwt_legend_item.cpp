@@ -235,8 +235,7 @@ void QwtLegendItem::setSpacing(int spacing)
     if ( spacing != d_data->spacing )
     {
         d_data->spacing = spacing;
-        setIndent(margin() + d_data->identifierWidth 
-            + 2 * d_data->spacing);
+        setIndent(margin() + d_data->identifierWidth  + 2 * d_data->spacing);
     }
 }
 

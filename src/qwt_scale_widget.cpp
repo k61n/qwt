@@ -578,14 +578,11 @@ void QwtScaleWidget::layoutScale( bool update_geometry )
 {
     int bd0, bd1;
     getBorderDistHint(bd0, bd1);
-    if ( d_data->borderDist[0] > bd0 )
-        bd0 = d_data->borderDist[0];
-    if ( d_data->borderDist[1] > bd1 )
-        bd1 = d_data->borderDist[1];
+    if ( d_data->borderDist[0] > bd0 ) bd0 = d_data->borderDist[0];
+    if ( d_data->borderDist[1] > bd1 ) bd1 = d_data->borderDist[1];
 
     int colorBarWidth = 0;
-    if ( d_data->colorBar.isEnabled && d_data->colorBar.interval.isValid() )
-        colorBarWidth = d_data->colorBar.width + d_data->spacing;
+    if ( d_data->colorBar.isEnabled && d_data->colorBar.interval.isValid() ) colorBarWidth = d_data->colorBar.width + d_data->spacing;
 
     const QRect r = rect();
     int x, y, length;
@@ -614,9 +611,7 @@ void QwtScaleWidget::layoutScale( bool update_geometry )
     d_data->scaleDraw->move(x, y);
     d_data->scaleDraw->setLength(length);
 
-    d_data->titleOffset = d_data->margin + d_data->spacing +
-        colorBarWidth +
-        d_data->scaleDraw->extent(QPen(Qt::black, d_data->penWidth), font());
+    d_data->titleOffset = d_data->margin + d_data->spacing + colorBarWidth + d_data->scaleDraw->extent(QPen(Qt::black, d_data->penWidth), font());
 
     if ( update_geometry )
     {

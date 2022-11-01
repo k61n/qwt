@@ -7,6 +7,29 @@
 # modify it under the terms of the Qwt License, Version 1.0
 ##############################################
 
+
+mac:   SYS=mac$$system(sw_vers -productVersion)
+linux-g++: SYS = linux64
+linux-g++-64: SYS = linux64
+
+###############################################################
+## OS: win ####################################################
+###############################################################
+win32{
+SYS=winxp
+
+winver = $$system(ver)
+
+lst1 = $$split(winver, " ")
+verstr=$$member(lst1, 3)
+lst2 = $$split(verstr,".")
+vernum=$$member(lst2, 0)
+
+contains(vernum,11) SYS=win11
+contains(vernum,10) SYS=win10
+contains(vernum,6)  SYS=win
+}
+
 # qmake project file for building the qwt libraries
 
 QWT_ROOT = ..
@@ -37,9 +60,13 @@ else {
 TARGET            = qwt$${SUFFIX_STR}
 TEMPLATE          = lib
 
-MOC_DIR           = moc
-OBJECTS_DIR       = obj$${SUFFIX_STR}
-DESTDIR           = $${QWT_ROOT}/lib
+#######################
+# NEW :: QTIKWS12
+#######################
+
+MOC_DIR		= ../../../tmp/$${SYS}/qwt
+OBJECTS_DIR	= ../../../tmp/$${SYS}/qwt
+DESTDIR		= ../../../lib/$${SYS}
 
 contains(CONFIG, QwtDll ) {
     CONFIG += dll
