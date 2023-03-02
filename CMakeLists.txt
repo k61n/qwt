@@ -177,6 +177,5 @@ set(HEADERS
 )
 
 add_library(qwt ${SOURCES} ${HEADERS})
-set_target_properties(qwt PROPERTIES LINK_SEARCH_START_STATIC 1)
 target_include_directories(qwt PUBLIC ${QtCore_INCLUDE_DIRS} ${QtGui_INCLUDE_DIRS} ${QtSvg_INCLUDE_DIRS})
 target_link_libraries(qwt PUBLIC Qt4::QtCore Qt4::QtGui Qt4::QtSvg)
