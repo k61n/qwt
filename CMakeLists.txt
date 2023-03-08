@@ -100,8 +100,7 @@ set(SOURCES
     src/qwt_knob.cpp
     src/qwt_slider.cpp
     src/qwt_thermo.cpp
-    src/qwt_wheel.cpp
-)
+    src/qwt_wheel.cpp)
 
 set(HEADERS
     src/qwt.h
@@ -173,9 +172,18 @@ set(HEADERS
     src/qwt_knob.h
     src/qwt_slider.h
     src/qwt_thermo.h
-    src/qwt_wheel.h
-)
+    src/qwt_wheel.h)
 
 add_library(qwt ${SOURCES} ${HEADERS})
 target_include_directories(qwt PUBLIC ${QtCore_INCLUDE_DIRS} ${QtGui_INCLUDE_DIRS} ${QtSvg_INCLUDE_DIRS})
 target_link_libraries(qwt PUBLIC Qt4::QtCore Qt4::QtGui Qt4::QtSvg)
+
+include(GNUInstallDirs)
+install(TARGETS qwt
+        EXPORT qwtTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${HEADERS}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qwt)
