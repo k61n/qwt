@@ -369,7 +369,11 @@ void QwtSlider::scaleChange()
 //! Notify change in font
 void QwtSlider::fontChange(const QFont &f)
 {
+#if QT_VERSION >= 0x050000
+    this->setFont(f);
+#else //QT_VERSION < 0x050000
     QwtAbstractSlider::fontChange( f );
+#endif
     layoutSlider();
 }
 

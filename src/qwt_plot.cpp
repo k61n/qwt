@@ -416,9 +416,17 @@ void QwtPlot::updateLayout()
             {
                 QRegion r(d_data->layout->scaleRect(axisId));
                 if ( axisEnabled(yLeft) )
+#if QT_VERSION >= 0x050000
+                    r = r.subtracted(QRegion(d_data->layout->scaleRect(yLeft)));
+#else //QT_VERSION < 0x050000
                     r = r.subtract(QRegion(d_data->layout->scaleRect(yLeft)));
+#endif
                 if ( axisEnabled(yRight) )
+#if QT_VERSION >= 0x050000
+                    r = r.subtracted(QRegion(d_data->layout->scaleRect(yRight)));
+#else //QT_VERSION < 0x050000
                     r = r.subtract(QRegion(d_data->layout->scaleRect(yRight)));
+#endif
                 r.translate(-d_data->layout->scaleRect(axisId).x(), 
                     -d_data->layout->scaleRect(axisId).y());
 

@@ -199,7 +199,11 @@ void QwtPicker::PickerWidget::updateMask()
     w->setUpdatesEnabled(doUpdate);
 #endif
 
+#if QT_VERSION >= 0x050000
+    setVisible(!mask.isEmpty());
+#else //QT_VERSION < 0x050000
     setShown(!mask.isEmpty());
+#endif
 }
 
 void QwtPicker::PickerWidget::paintEvent(QPaintEvent *e)

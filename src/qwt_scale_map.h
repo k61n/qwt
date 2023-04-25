@@ -84,8 +84,13 @@ public:
     inline double pDist() const;
     inline double sDist() const;
 
+#if QT_VERSION >= 0x050000
+    static double LogMin;
+    static double LogMax;
+#else //QT_VERSION < 0x050000
     QT_STATIC_CONST double LogMin;
     QT_STATIC_CONST double LogMax;
+#endif
 
 private:
     void newFactor();   

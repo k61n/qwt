@@ -158,11 +158,18 @@ QwtArrayData::QwtArrayData(const double *x, const double *y, size_t size)
 {
 #if QT_VERSION >= 0x040000
     d_x.resize(size);
+#if QT_VERSION >= 0x050000
+    memcpy(d_x.data(), x, size * sizeof(double));
+#else //QT_VERSION < 0x050000
     qMemCopy(d_x.data(), x, size * sizeof(double));
-
+#endif
     d_y.resize(size);
+#if QT_VERSION >= 0x050000
+    memcpy(d_y.data(), y, size * sizeof(double));
+#else //QT_VERSION < 0x050000
     qMemCopy(d_y.data(), y, size * sizeof(double));
-#else
+#endif
+#else //QT_VERSION < 0x040000
     d_x.detach();
     d_x.duplicate(x, size);
 

@@ -9,8 +9,13 @@
 
 #include "qwt_scale_map.h"
 
+#if QT_VERSION >= 0x050000
+double QwtScaleMap::LogMin = 1.0e-150;
+double QwtScaleMap::LogMax = 1.0e150;
+#else //QT_VERSION < 0x050000
 QT_STATIC_CONST_IMPL double QwtScaleMap::LogMin = 1.0e-150;
 QT_STATIC_CONST_IMPL double QwtScaleMap::LogMax = 1.0e150;
+#endif
 
 //! Constructor for a linear transformation
 QwtScaleTransformation::QwtScaleTransformation(Type type):
