@@ -107,7 +107,7 @@ protected:
     virtual void drawContents(QPainter *);
     virtual void drawFocusIndicator(QPainter *);
 
-    void drawCanvas(QPainter *painter = NULL);
+    void drawCanvas(QPainter *painter = nullptr);
 
 private:    
     void setSystemBackground(bool);

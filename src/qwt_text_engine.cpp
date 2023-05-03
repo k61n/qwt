@@ -133,7 +133,11 @@ private:
         static const QColor white(Qt::white);
 
         const QFontMetrics fm(font);
-        QPixmap pm(fm.width(dummy), fm.height()); 
+#if QT_VERSION < 0x050f00
+        QPixmap pm(fm.width(dummy), fm.height());
+#else
+        QPixmap pm(fm.horizontalAdvance(dummy), fm.height());
+#endif
         pm.fill(white);
 
         QPainter p(&pm);
@@ -337,8 +341,8 @@ QSize QwtRichTextEngine::textSize(const QFont &font,
     */
 
     static int off = 0;
-    static QLabel *label = NULL;
-    if ( label == NULL )
+    static QLabel *label = nullptr;
+    if ( label == nullptr )
     {
         label = new QLabel;
         label->hide();

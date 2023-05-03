@@ -331,7 +331,7 @@ void QwtSlider::setThumbWidth(int w)
 void QwtSlider::setScaleDraw(QwtScaleDraw *scaleDraw)
 {
     const QwtScaleDraw *previousScaleDraw = this->scaleDraw();
-    if ( scaleDraw == NULL || scaleDraw == previousScaleDraw )
+    if ( scaleDraw == nullptr || scaleDraw == previousScaleDraw )
         return;
 
     if ( previousScaleDraw )

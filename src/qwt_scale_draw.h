@@ -10,6 +10,17 @@
 #ifndef QWT_SCALE_DRAW_H
 #define QWT_SCALE_DRAW_H
 
+#if QT_VERSION < 0x040000
+#include <qwmatrix.h>
+#define QwtMatrix QWMatrix
+#elif QT_VERSION < 0x050f00
+#include <qmatrix.h>
+#define QwtMatrix QMatrix
+#else
+#include <QTransform>
+#define QwtMatrix QTransform
+#endif
+
 #include <qpoint.h>
 #include "qwt_global.h"
 #include "qwt_abstract_scale_draw.h"
@@ -87,7 +98,7 @@ protected:
 #if QT_VERSION < 0x040000
     QWMatrix labelMatrix(const QPoint &, const QSize &) const;
 #else   
-    QMatrix labelMatrix(const QPoint &, const QSize &) const;
+    QwtMatrix labelMatrix(const QPoint &, const QSize &) const;
 #endif  
 
     virtual void drawTick(QPainter *p, double val, int len) const;

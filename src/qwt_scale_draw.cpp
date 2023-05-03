@@ -18,21 +18,17 @@
 #include "qwt_scale_map.h"
 #include "qwt_scale_draw.h"
 
-#if QT_VERSION < 0x040000
-#include <qwmatrix.h>
-#define QwtMatrix QWMatrix
-#else
-#include <qmatrix.h>
-#define QwtMatrix QMatrix
-#endif
-
 class QwtScaleDraw::PrivateData
 {
 public:
     PrivateData():
         len(0),
         alignment(QwtScaleDraw::BottomScale),
+#if QT_VERSION < 0x050f00
         labelAlignment(0),
+#else
+        labelAlignment(Qt::AlignLeft),
+#endif
         labelRotation(0.0)
     {
     }
@@ -652,8 +648,10 @@ void QwtScaleDraw::drawLabel(QPainter *painter, double value) const
     painter->save();
 #if QT_VERSION < 0x040000
     painter->setWorldMatrix(m, true);
-#else
+#elif QT_VERSION < 0x050f00
     painter->setMatrix(m, true);
+#else
+    painter->setWorldTransform(m, true);
 #endif
 
     lbl.draw (painter, QRect(QPoint(0, 0), labelSize) );

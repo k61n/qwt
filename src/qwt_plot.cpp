@@ -119,7 +119,7 @@ void QwtPlot::initPlot(const QwtText &title)
     text.setRenderFlags(flags);
     d_data->lblTitle->setText(text);
 
-    d_data->legend = NULL;
+    d_data->legend = nullptr;
 
     initAxesData();
 
@@ -486,14 +486,14 @@ void QwtPlot::updateTabOrder()
         d_data->layout->legendPosition() == QwtPlot::BottomLegend ||
         d_data->layout->legendPosition() == QwtPlot::RightLegend;
 
-    QWidget *previous = NULL; 
+    QWidget *previous = nullptr;
 
     QWidget *w;
 #if QT_VERSION >= 0x040000
     w = d_data->canvas;
     while ( ( w = w->nextInFocusChain() ) != d_data->canvas )
 #else
-    if ( focusData() == NULL )
+    if ( focusData() == nullptr )
         return;
 
     while ( focusData()->next() != d_data->canvas );

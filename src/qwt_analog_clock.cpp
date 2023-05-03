@@ -51,7 +51,11 @@ void QwtAnalogClock::initClock()
 #else
         palette().color(QPalette::Active, QPalette::Text);
 #endif
+#if QT_VERSION < 0x050f00
     knobColor = knobColor.dark(120);
+#else
+    knobColor = knobColor.darker(120);
+#endif
 
     QColor handColor;
     int width;
@@ -61,7 +65,11 @@ void QwtAnalogClock::initClock()
         if ( i == SecondHand )
         {
             width = 2;
+#if QT_VERSION < 0x050f00
             handColor = knobColor.dark(120);
+#else
+            handColor = knobColor.darker(120);
+#endif
         }
         else
         {
@@ -73,7 +81,7 @@ void QwtAnalogClock::initClock()
             QwtDialSimpleNeedle::Arrow, true, handColor, knobColor);
         hand->setWidth(width);
 
-        d_hand[i] = NULL;
+        d_hand[i] = nullptr;
         setHand((Hand)i, hand);
     }
 }
@@ -118,7 +126,7 @@ void QwtAnalogClock::setHand(Hand hand, QwtDialNeedle *needle)
 QwtDialNeedle *QwtAnalogClock::hand(Hand hd)
 {
     if ( hd < 0 || hd >= NHands )
-        return NULL;
+        return nullptr;
 
     return d_hand[hd];
 }

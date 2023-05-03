@@ -126,8 +126,8 @@ public:
         ExternalLegend
     };
 
-    explicit QwtPlot(QWidget * = NULL);
-    explicit QwtPlot(const QwtText &title, QWidget *p = NULL);
+    explicit QwtPlot(QWidget * = nullptr);
+    explicit QwtPlot(const QwtText &title, QWidget *p = nullptr);
 #if QT_VERSION < 0x040000
     explicit QwtPlot(QWidget *, const char* name);
 #endif

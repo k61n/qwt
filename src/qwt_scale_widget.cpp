@@ -24,9 +24,9 @@ class QwtScaleWidget::PrivateData
 {
 public:
     PrivateData():
-        scaleDraw(NULL)
+        scaleDraw(nullptr)
     {
-        colorBar.colorMap = NULL;
+        colorBar.colorMap = nullptr;
     }
 
     ~PrivateData()
@@ -369,7 +369,7 @@ void QwtScaleWidget::setLabelRotation(double rotation)
 */
 void QwtScaleWidget::setScaleDraw(QwtScaleDraw *sd)
 {
-    if ( sd == NULL || sd == d_data->scaleDraw )
+    if ( sd == nullptr || sd == d_data->scaleDraw )
         return;
 
     if ( d_data->scaleDraw )

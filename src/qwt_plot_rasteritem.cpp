@@ -11,6 +11,9 @@
 #include <qdesktopwidget.h>
 #include <qpaintdevice.h>
 #include <qpainter.h>
+#if QT_VERSION > 0x050f00
+    #include <QScreen>
+#endif
 #include "qwt_legend.h"
 #include "qwt_legend_item.h"
 #include "qwt_scale_map.h"
@@ -274,7 +277,11 @@ void QwtPlotRasterItem::draw(QPainter *painter,
     else if ( d_data->cache.policy == ScreenCache )
     {
         const QSize screenSize =
+#if QT_VERSION < 0x050f00
             QApplication::desktop()->screenGeometry().size();
+#else
+            QGuiApplication::screens().first()->geometry().size();
+#endif
 
         if ( paintRect.width() > screenSize.width() ||
             paintRect.height() > screenSize.height() )

@@ -120,10 +120,10 @@ public:
        \brief This method detaches a QwtPlotItem from any QwtPlot it has been
               associated with.
 
-       detach() is equivalent to calling attach( NULL )
+       detach() is equivalent to calling attach( nullptr )
        \sa attach( QwtPlot* plot )
     */
-    void detach() { attach(NULL); }
+    void detach() { attach(nullptr); }
 
     QwtPlot *plot() const;
     

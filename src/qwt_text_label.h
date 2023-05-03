@@ -30,11 +30,11 @@ class QWT_EXPORT QwtTextLabel : public QFrame
     Q_PROPERTY( int margin READ margin WRITE setMargin )
 
 public:
-    explicit QwtTextLabel(QWidget *parent = NULL);
+    explicit QwtTextLabel(QWidget *parent = nullptr);
 #if QT_VERSION < 0x040000
     explicit QwtTextLabel(QWidget *parent, const char *name);
 #endif
-    explicit QwtTextLabel(const QwtText &, QWidget *parent = NULL);
+    explicit QwtTextLabel(const QwtText &, QWidget *parent = nullptr);
     virtual ~QwtTextLabel();
 
 public slots:

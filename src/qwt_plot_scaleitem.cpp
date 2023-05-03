@@ -219,7 +219,7 @@ QFont QwtPlotScaleItem::font() const
 */
 void QwtPlotScaleItem::setScaleDraw(QwtScaleDraw *scaleDraw) 
 {
-    if ( scaleDraw == NULL )
+    if ( scaleDraw == nullptr )
         return;
 
     if ( scaleDraw != d_data->scaleDraw )
@@ -456,7 +456,7 @@ void QwtPlotScaleItem::updateScaleDiv(const QwtScaleDiv& xScaleDiv,
 void QwtPlotScaleItem::updateBorders()
 {
     const QwtPlot *plt = plot();
-    if ( plt == NULL || !d_data->scaleDivFromAxis )
+    if ( plt == nullptr || !d_data->scaleDivFromAxis )
         return;
     
     const QRect r = plt->canvas()->contentsRect();

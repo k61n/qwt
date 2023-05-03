@@ -34,7 +34,7 @@ public:
         virtual QLayoutItem *current()
         { 
             if (d_iterator == d_data->itemList.end())
-               return NULL;
+               return nullptr;
 
             return *d_iterator;
         }
@@ -42,11 +42,11 @@ public:
         virtual QLayoutItem *next()
         { 
             if (d_iterator == d_data->itemList.end())
-               return NULL;
+               return nullptr;
 
             d_iterator++;
             if (d_iterator == d_data->itemList.end())
-               return NULL;
+               return nullptr;
 
             return *d_iterator;
         }
@@ -54,7 +54,7 @@ public:
         virtual QLayoutItem *takeCurrent()
         { 
             if ( d_iterator == d_data->itemList.end() )
-                return NULL;
+                return nullptr;
 
             QLayoutItem *item = *d_iterator;
 
@@ -148,8 +148,10 @@ void QwtDynGridLayout::init()
 #if QT_VERSION < 0x040000
     d_data->expanding = QSizePolicy::NoDirection;
     setSupportsMargin(true);
-#else
+#elif QT_VERSION < 0x050f00
     d_data->expanding = 0;
+#else
+    d_data->expanding = Qt::Orientations();
 #endif
 }
 
@@ -266,7 +268,7 @@ QSizePolicy::ExpandData QwtDynGridLayout::expanding() const
 QLayoutItem *QwtDynGridLayout::itemAt( int index ) const
 {
     if ( index < 0 || index >= d_data->itemList.count() )
-        return NULL;
+        return nullptr;
 
     return d_data->itemList.at(index);
 }
@@ -280,7 +282,7 @@ QLayoutItem *QwtDynGridLayout::itemAt( int index ) const
 QLayoutItem *QwtDynGridLayout::takeAt( int index )
 {
     if ( index < 0 || index >= d_data->itemList.count() )
-        return NULL;
+        return nullptr;
   
     d_data->isDirty = true;
     return d_data->itemList.takeAt(index);

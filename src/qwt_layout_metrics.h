@@ -21,7 +21,7 @@ class QFontMetrics;
 #if QT_VERSION < 0x040000
 class QWMatrix;
 #else
-class QMatrix;
+class QwtMatrix;
 #endif
 class QPaintDevice;
 
@@ -60,9 +60,9 @@ public:
     int screenToLayoutY(int y) const;
     int layoutToScreenY(int y) const;
 
-    QPoint layoutToDevice(const QPoint &, const QPainter * = NULL) const;
-    QPointF layoutToDevice(const QPointF &, const QPainter * = NULL) const;
-    QPoint deviceToLayout(const QPoint &, const QPainter * = NULL) const;
+    QPoint layoutToDevice(const QPoint &, const QPainter * = nullptr) const;
+    QPointF layoutToDevice(const QPointF &, const QPainter * = nullptr) const;
+    QPoint deviceToLayout(const QPoint &, const QPainter * = nullptr) const;
     QPoint screenToLayout(const QPoint &) const;
     QPoint layoutToScreen(const QPoint &point) const;
 
@@ -72,25 +72,29 @@ public:
     QSize screenToLayout(const QSize &) const;
     QSize layoutToScreen(const QSize &) const;
 
-    QRect layoutToDevice(const QRect &, const QPainter * = NULL) const;
-    QRect deviceToLayout(const QRect &, const QPainter * = NULL) const;
+    QRect layoutToDevice(const QRect &, const QPainter * = nullptr) const;
+    QRect deviceToLayout(const QRect &, const QPainter * = nullptr) const;
     QRect screenToLayout(const QRect &) const;
     QRect layoutToScreen(const QRect &) const;
 
     QwtPolygon layoutToDevice(const QwtPolygon &,
-        const QPainter * = NULL) const;
+        const QPainter * = nullptr) const;
 	QwtPolygonF layoutToDevice(const QwtPolygonF &,
-        const QPainter * = NULL) const;
+        const QPainter * = nullptr) const;
     QwtPolygon deviceToLayout(const QwtPolygon &,
-        const QPainter * = NULL) const;
+        const QPainter * = nullptr) const;
 
 #if QT_VERSION < 0x040000
     static QwtPolygon translate(const QWMatrix &, const QwtPolygon &);
     static QRect translate(const QWMatrix &, const QRect &);
-#else
+#elif QT_VERSION < 0x050f00
     static QwtPolygon translate(const QMatrix &, const QwtPolygon &);
     static QwtPolygonF translate(const QMatrix &, const QwtPolygonF &);
     static QRect translate(const QMatrix &, const QRect &);
+#else
+    static QwtPolygon translate(const QTransform &, const QwtPolygon &);
+    static QwtPolygonF translate(const QTransform &, const QwtPolygonF &);
+    static QRect translate(const QTransform &, const QRect &);
 #endif
 
 private:

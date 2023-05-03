@@ -32,7 +32,7 @@ class QwtPlotPrintFilter::PrivateData
 public:
     PrivateData():
         options(QwtPlotPrintFilter::PrintAll),
-        cache(NULL)
+        cache(nullptr)
     {
     }
 

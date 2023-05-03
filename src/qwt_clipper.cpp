@@ -8,6 +8,8 @@
  *****************************************************************************/
 
 #include <qrect.h>
+#include <QList>
+
 #include "qwt_math.h"
 #include "qwt_clipper.h"
 
@@ -386,7 +388,11 @@ QwtArray<QwtDoubleInterval> QwtCircleClipper::clipCircle(
         QList<double> angles;
         for ( int i = 0; i < points.size(); i++ )
             angles += toAngle(pos, points[i]);
+#if QT_VERSION < 0x050f00
         qSort(angles);
+#else
+        std::sort(angles.begin(), angles.end());
+#endif
 
         const int in = contains(qwtPolar2Pos(pos, radius, 
             angles[0] + (angles[1] - angles[0]) / 2));

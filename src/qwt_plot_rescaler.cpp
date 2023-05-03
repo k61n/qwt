@@ -259,7 +259,7 @@ QwtPlotCanvas *QwtPlotRescaler::canvas()
     if ( o && o->inherits("QwtPlotCanvas") )
         return (QwtPlotCanvas *)o;
 
-    return NULL;
+    return nullptr;
 }
 
 //! \return plot canvas
@@ -279,7 +279,7 @@ QwtPlot *QwtPlotRescaler::plot()
             return (QwtPlot *)w;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 //! \return plot widget

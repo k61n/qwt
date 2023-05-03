@@ -83,7 +83,7 @@ QwtArrowButton::QwtArrowButton(int num,
 QwtArrowButton::~QwtArrowButton()
 {
     delete d_data;
-    d_data = NULL;
+    d_data = nullptr;
 }
 
 /*!

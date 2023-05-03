@@ -95,9 +95,6 @@ QwtWheel::~QwtWheel()
 //! Set up the color array for the background pixmap.
 void QwtWheel::setColorArray()
 {
-    if ( !d_data->colors ) 
-        return;
-
 #if QT_VERSION < 0x040000
     const QColor light = colorGroup().light();
     const QColor dark = colorGroup().dark();

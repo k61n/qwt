@@ -288,8 +288,8 @@ void QwtPicker::init(QWidget *parent, int selectionFlags,
 {
     d_data = new PrivateData;
 
-    d_data->rubberBandWidget = NULL;
-    d_data->trackerWidget = NULL;
+    d_data->rubberBandWidget = nullptr;
+    d_data->trackerWidget = nullptr;
 
     d_data->rubberBand = rubberBand;
     d_data->enabled = false;
@@ -299,7 +299,7 @@ void QwtPicker::init(QWidget *parent, int selectionFlags,
     d_data->trackerPosition = QPoint(-1, -1);
     d_data->mouseTracking = false;
 
-    d_data->stateMachine = NULL;
+    d_data->stateMachine = nullptr;
     setSelectionFlags(selectionFlags);
 
     if ( parent )
@@ -372,7 +372,7 @@ QwtPickerMachine *QwtPicker::stateMachine(int flags) const
     {
         return new QwtPickerPolygonMachine();
     }
-    return NULL;
+    return nullptr;
 }
 
 //! Return the parent widget, where the selection happens
@@ -382,7 +382,7 @@ QWidget *QwtPicker::parentWidget()
     if ( obj && obj->isWidgetType() )
         return (QWidget *)obj;
 
-    return NULL;
+    return nullptr;
 }
 
 //! Return the parent widget, where the selection happens
@@ -392,7 +392,7 @@ const QWidget *QwtPicker::parentWidget() const
     if ( obj && obj->isWidgetType() )
         return (QWidget *)obj;
 
-    return NULL;
+    return nullptr;
 }
 
 /*!
@@ -635,6 +635,7 @@ QwtText QwtPicker::trackerText(const QPoint &pos) const
 
     switch(rubberBand())
     {
+#if QT_VERSION < 0x050f00
         case HLineRubberBand:
             label.sprintf("%d", pos.y());
             break;
@@ -643,6 +644,16 @@ QwtText QwtPicker::trackerText(const QPoint &pos) const
             break;
         default:
             label.sprintf("%d, %d", pos.x(), pos.y());
+#else
+        case HLineRubberBand:
+            label = QString::number(pos.y(), 'f', 0);
+            break;
+        case VLineRubberBand:
+            label = QString::number(pos.x(), 'f', 0);
+            break;
+        default:
+            label = QString("%0, %1").arg(pos.x()).arg(pos.y());
+#endif
     }
     return label;
 }
@@ -1005,8 +1016,13 @@ void QwtPicker::widgetMouseDoubleClickEvent(QMouseEvent *me)
 */
 void QwtPicker::widgetWheelEvent(QWheelEvent *e)
 {
+#if QT_VERSION < 0x050f00
     if ( pickRect().contains(e->pos()) )
         d_data->trackerPosition = e->pos();
+#else
+    if ( pickRect().contains(e->position().toPoint()) )
+        d_data->trackerPosition = e->position().toPoint();
+#endif
     else
         d_data->trackerPosition = QPoint(-1, -1);
 

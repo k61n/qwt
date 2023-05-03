@@ -48,11 +48,11 @@ public:
         TitleInverted = 1
     };
 
-    explicit QwtScaleWidget(QWidget *parent = NULL);
+    explicit QwtScaleWidget(QWidget *parent = nullptr);
 #if QT_VERSION < 0x040000
     explicit QwtScaleWidget(QWidget *parent, const char *name);
 #endif
-    explicit QwtScaleWidget(QwtScaleDraw::Alignment, QWidget *parent = NULL);
+    explicit QwtScaleWidget(QwtScaleDraw::Alignment, QWidget *parent = nullptr);
     virtual ~QwtScaleWidget();
 
 signals:

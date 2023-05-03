@@ -89,12 +89,12 @@ void QwtPlot::deleteAxesData()
     {
         delete d_axisData[axisId]->scaleEngine;
         delete d_axisData[axisId];
-        d_axisData[axisId] = NULL;
+        d_axisData[axisId] = nullptr;
     }
 }
 
 /*!
-  \return specified axis, or NULL if axisId is invalid.
+  \return specified axis, or nullptr if axisId is invalid.
   \param axisId axis index
 */
 const QwtScaleWidget *QwtPlot::axisWidget(int axisId) const
@@ -102,11 +102,11 @@ const QwtScaleWidget *QwtPlot::axisWidget(int axisId) const
     if (axisValid(axisId))
         return d_axisData[axisId]->scaleWidget;
 
-    return NULL;
+    return nullptr;
 }
 
 /*!
-  \return specified axis, or NULL if axisId is invalid.
+  \return specified axis, or nullptr if axisId is invalid.
   \param axisId axis index
 */
 QwtScaleWidget *QwtPlot::axisWidget(int axisId)
@@ -114,7 +114,7 @@ QwtScaleWidget *QwtPlot::axisWidget(int axisId)
     if (axisValid(axisId))
         return d_axisData[axisId]->scaleWidget;
 
-    return NULL;
+    return nullptr;
 }
 
 /*!
@@ -127,7 +127,7 @@ QwtScaleWidget *QwtPlot::axisWidget(int axisId)
 */
 void QwtPlot::setAxisScaleEngine(int axisId, QwtScaleEngine *scaleEngine)
 {
-    if (axisValid(axisId) && scaleEngine != NULL )
+    if (axisValid(axisId) && scaleEngine != nullptr )
     {
         AxisData &d = *d_axisData[axisId];
 
@@ -149,7 +149,7 @@ QwtScaleEngine *QwtPlot::axisScaleEngine(int axisId)
     if (axisValid(axisId))
         return d_axisData[axisId]->scaleEngine;
     else
-        return NULL;
+        return nullptr;
 }
 
 /*! 
@@ -161,7 +161,7 @@ const QwtScaleEngine *QwtPlot::axisScaleEngine(int axisId) const
     if (axisValid(axisId))
         return d_axisData[axisId]->scaleEngine;
     else
-        return NULL;
+        return nullptr;
 }
 /*!
   \return \c true if autoscaling is enabled
@@ -241,7 +241,7 @@ int QwtPlot::axisMaxMinor(int axisId) const
 const QwtScaleDiv *QwtPlot::axisScaleDiv(int axisId) const
 {
     if (!axisValid(axisId))
-        return NULL;
+        return nullptr;
 
     return &d_axisData[axisId]->scaleDiv;
 }
@@ -260,7 +260,7 @@ const QwtScaleDiv *QwtPlot::axisScaleDiv(int axisId) const
 QwtScaleDiv *QwtPlot::axisScaleDiv(int axisId) 
 {
     if (!axisValid(axisId))
-        return NULL;
+        return nullptr;
 
     return &d_axisData[axisId]->scaleDiv;
 }
@@ -268,13 +268,13 @@ QwtScaleDiv *QwtPlot::axisScaleDiv(int axisId)
 /*!
   \returns the scale draw of a specified axis
   \param axisId axis index
-  \return specified scaleDraw for axis, or NULL if axis is invalid.
+  \return specified scaleDraw for axis, or nullptr if axis is invalid.
   \sa QwtScaleDraw
 */
 const QwtScaleDraw *QwtPlot::axisScaleDraw(int axisId) const
 {
     if (!axisValid(axisId))
-        return NULL;
+        return nullptr;
 
     return axisWidget(axisId)->scaleDraw();
 }
@@ -282,13 +282,13 @@ const QwtScaleDraw *QwtPlot::axisScaleDraw(int axisId) const
 /*!
   \returns the scale draw of a specified axis
   \param axisId axis index
-  \return specified scaleDraw for axis, or NULL if axis is invalid.
+  \return specified scaleDraw for axis, or nullptr if axis is invalid.
   \sa QwtScaleDraw
 */
 QwtScaleDraw *QwtPlot::axisScaleDraw(int axisId) 
 {
     if (!axisValid(axisId))
-        return NULL;
+        return nullptr;
 
     return axisWidget(axisId)->scaleDraw();
 }

@@ -329,7 +329,7 @@ bool QwtMagnifier::eventFilter(QObject *o, QEvent *e)
 */
 void QwtMagnifier::widgetMousePressEvent(QMouseEvent *me)
 {
-    if ( me->button() != d_data->mouseButton || parentWidget() == NULL )
+    if ( me->button() != d_data->mouseButton || parentWidget() == nullptr )
         return;
 
 #if QT_VERSION < 0x040000
@@ -416,9 +416,14 @@ void QwtMagnifier::widgetWheelEvent(QWheelEvent *we)
            in which case the delta value is a multiple 
            of 120 (== 15 * 8).
         */
-        double f = ::pow(d_data->wheelFactor, 
-            qwtAbs(we->delta() / 120));
+        double f = ::pow(d_data->wheelFactor,
+#if QT_VERSION < 0x050f00
+                         qwtAbs(we->delta() / 120));
         if ( we->delta() > 0 )
+#else
+                         qwtAbs(we->angleDelta().y() / 120));
+        if ( we->angleDelta().y() > 0 )
+#endif
             f = 1 / f;
 
         rescale(f);
@@ -468,7 +473,7 @@ QWidget *QwtMagnifier::parentWidget()
     if ( parent()->inherits("QWidget") )
         return (QWidget *)parent();
 
-    return NULL;
+    return nullptr;
 }
 
 //! \return Parent widget, where the rescaling happens
@@ -477,6 +482,6 @@ const QWidget *QwtMagnifier::parentWidget() const
     if ( parent()->inherits("QWidget") )
         return (const QWidget *)parent();
 
-    return NULL;
+    return nullptr;
 }
 

@@ -8,7 +8,11 @@
  *****************************************************************************/
 
 #include <qevent.h>
-#include <qdatetime.h>
+#if QT_VERSION < 0x050f00
+    #include <qdatetime.h>
+#else
+    #include <QElapsedTimer>
+#endif
 #include "qwt_abstract_slider.h"
 #include "qwt_math.h"
 
@@ -38,7 +42,11 @@ public:
     int tmrID;
     int updTime;
     int timerTick;
+#if QT_VERSION < 0x050f00
     QTime time;
+#else
+    QElapsedTimer time;
+#endif
     double speed;
     double mass;
     Qt::Orientation orientation;
@@ -53,7 +61,7 @@ public:
 */
 QwtAbstractSlider::QwtAbstractSlider(
         Qt::Orientation orientation, QWidget *parent): 
-    QWidget(parent, NULL)
+    QWidget(parent)
 {
     d_data = new QwtAbstractSlider::PrivateData;
     d_data->orientation = orientation;
@@ -353,10 +361,18 @@ void QwtAbstractSlider::wheelEvent(QWheelEvent *e)
     int mode = ScrNone, direction = 0;
 
     // Give derived classes a chance to say ScrNone
+#if QT_VERSION < 0x050f00
     getScrollMode(e->pos(), mode, direction);
+#else
+    getScrollMode(e->position().toPoint(), mode, direction);
+#endif
     if ( mode != ScrNone )
     {
+#if QT_VERSION < 0x050f00
         const int inc = e->delta() / WHEEL_DELTA;
+#else
+        const int inc = e->angleDelta().y() / WHEEL_DELTA;
+#endif
         QwtDoubleRange::incPages(inc);
         if (value() != prevValue())
             emit sliderMoved(value());

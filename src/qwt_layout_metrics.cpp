@@ -13,9 +13,12 @@
 #include <qpaintdevicemetrics.h>
 #include <qwmatrix.h>
 #define QwtMatrix QWMatrix
-#else
+#elif QT_VERSION < 0x050f00
 #include <qmatrix.h>
 #define QwtMatrix QMatrix
+#else
+#include <QTransform>
+#define QwtMatrix QTransform
 #endif
 #include <qpaintdevice.h>
 #include <qdesktopwidget.h>
@@ -49,7 +52,7 @@ inline static QWMatrix invMatrix(const QPainter *painter)
     return painter->worldMatrix().invert();
 }
 
-#else // QT_VERSION >= 0x040000
+#elif QT_VERSION < 0x050f00
 
 inline static const QMatrix &matrix(const QPainter *painter)
 {
@@ -58,6 +61,17 @@ inline static const QMatrix &matrix(const QPainter *painter)
 inline static QMatrix invMatrix(const QPainter *painter)
 {
     return painter->matrix().inverted();
+}
+
+#else
+
+inline static const QTransform &matrix(const QPainter *painter)
+{
+    return painter->worldTransform();
+}
+inline static QTransform invMatrix(const QPainter *painter)
+{
+    return painter->worldTransform().inverted();
 }
 
 #endif

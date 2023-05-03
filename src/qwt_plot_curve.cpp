@@ -500,7 +500,7 @@ void QwtPlotCurve::setRawData(const double *xData, const double *yData, int size
 
 QwtDoubleRect QwtPlotCurve::boundingRect() const
 {
-    if ( d_xy == NULL )
+    if ( d_xy == nullptr )
         return QwtDoubleRect(1.0, 1.0, -2.0, -2.0); // invalid
 
     return d_xy->boundingRect();
@@ -1053,7 +1053,7 @@ QwtPlotCurve::CurveType QwtPlotCurve::curveType() const
 
 /*!
   Assign a curve fitter
-  setCurveFitter(NULL) disables curve fitting.
+  setCurveFitter(nullptr) disables curve fitting.
 
   \param curveFitter Curve fitter
 */
@@ -1066,7 +1066,7 @@ void QwtPlotCurve::setCurveFitter(QwtCurveFitter *curveFitter)
 }
 
 /*!
-  Get the curve fitter. If curve fitting is disabled NULL is returned.
+  Get the curve fitter. If curve fitting is disabled nullptr is returned.
   \return Curve fitter
 */
 QwtCurveFitter *QwtPlotCurve::curveFitter() const
@@ -1237,7 +1237,7 @@ int QwtPlotCurve::dataSize() const
   Find the closest curve point for a specific position
 
   \param pos Position, where to look for the closest curve point
-  \param dist If dist != NULL, closestPoint() returns the distance between
+  \param dist If dist != nullptr, closestPoint() returns the distance between
               the position and the clostest curve point
   \return Index of the closest curve point, or -1 if none can be found
           ( f.e when the curve has no points )
@@ -1246,7 +1246,7 @@ int QwtPlotCurve::dataSize() const
 */
 int QwtPlotCurve::closestPoint(const QPoint &pos, double *dist) const
 {
-    if ( plot() == NULL || dataSize() <= 0 )
+    if ( plot() == nullptr || dataSize() <= 0 )
         return -1;
 
     const QwtScaleMap xMap = plot()->canvasMap(xAxis());

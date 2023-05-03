@@ -102,7 +102,7 @@ void QwtTextEngineDict::setTextEngine(QwtText::TextFormat format,
     if ( format == QwtText::AutoText )
         return;
 
-    if ( format == QwtText::PlainText && engine == NULL )
+    if ( format == QwtText::PlainText && engine == nullptr )
         return;
 
     EngineMap::const_iterator it = d_map.find(format);
@@ -115,14 +115,14 @@ void QwtTextEngineDict::setTextEngine(QwtText::TextFormat format,
         d_map.remove(format);
     }
 
-    if ( engine != NULL )
+    if ( engine != nullptr )
         d_map.insert(format, engine);
 }
 
 const QwtTextEngine *QwtTextEngineDict::textEngine(
     QwtText::TextFormat format) const
 {
-    const QwtTextEngine *e = NULL;
+    const QwtTextEngine *e = nullptr;
 
     EngineMap::const_iterator it = d_map.find(format);
     if ( it != d_map.end() )
@@ -131,7 +131,7 @@ const QwtTextEngine *QwtTextEngineDict::textEngine(
     return e;
 }
 
-static QwtTextEngineDict *engineDict = NULL;
+static QwtTextEngineDict *engineDict = nullptr;
 
 class QwtText::PrivateData
 {
@@ -142,7 +142,7 @@ public:
         backgroundBrush(Qt::NoBrush),
         paintAttributes(0),
         layoutAttributes(0),
-        textEngine(NULL)
+        textEngine(nullptr)
     {
     }
 
@@ -625,7 +625,7 @@ void QwtText::draw(QPainter *painter, const QRect &rect) const
 const QwtTextEngine *QwtText::textEngine(const QString &text,
     QwtText::TextFormat format)
 {
-    if ( engineDict == NULL )
+    if ( engineDict == nullptr )
     {
         /*
           Note: engineDict is allocated, the first time it is used, 
@@ -649,7 +649,7 @@ const QwtTextEngine *QwtText::textEngine(const QString &text,
    that is based on the MathML renderer, that is included in MML Widget 
    component of the Qt solutions package.
 
-   For QwtText::PlainText it is not allowed to assign a engine == NULL.
+   For QwtText::PlainText it is not allowed to assign a engine == nullptr.
    
    \param format Text format
    \param engine Text engine
@@ -660,7 +660,7 @@ const QwtTextEngine *QwtText::textEngine(const QString &text,
 void QwtText::setTextEngine(QwtText::TextFormat format, 
     QwtTextEngine *engine)
 {
-    if ( engineDict == NULL )
+    if ( engineDict == nullptr )
         engineDict = new QwtTextEngineDict();
 
     engineDict->setTextEngine(format, engine);
@@ -675,11 +675,11 @@ void QwtText::setTextEngine(QwtText::TextFormat format,
    available in Qt Open Source Edition environments.
 
    \param format Text format
-   \return The text engine, or NULL if no engine is available.
+   \return The text engine, or nullptr if no engine is available.
 */
 const QwtTextEngine *QwtText::textEngine(QwtText::TextFormat format)
 {
-    if ( engineDict == NULL )
+    if ( engineDict == nullptr )
         engineDict = new QwtTextEngineDict();
 
     return engineDict->textEngine(format);

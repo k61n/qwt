@@ -111,7 +111,7 @@ QwtPlotCanvas *QwtPlotPicker::canvas()
     if ( w && w->inherits("QwtPlotCanvas") )
         return (QwtPlotCanvas *)w;
 
-    return NULL;
+    return nullptr;
 }
 
 //! Return Observed plot canvas
@@ -131,7 +131,7 @@ QwtPlot *QwtPlotPicker::plot()
             return (QwtPlot *)w;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 //! Return plot widget, containing the observed plot canvas
@@ -225,6 +225,7 @@ QwtText QwtPlotPicker::trackerText(const QwtDoublePoint &pos) const
 
     switch(rubberBand())
     {
+#if QT_VERSION < 0x050f00
         case HLineRubberBand:
             text.sprintf("%.4f", pos.y());
             break;
@@ -233,6 +234,17 @@ QwtText QwtPlotPicker::trackerText(const QwtDoublePoint &pos) const
             break;
         default:
             text.sprintf("%.4f, %.4f", pos.x(), pos.y());
+#else
+        case HLineRubberBand:
+            text = QString::number(pos.y(), 'f', 4);
+            break;
+        case VLineRubberBand:
+            text = QString::number(pos.x(), 'f', 4);
+            break;
+        default:
+            text = QString("%0, %1").arg(pos.x(), 0, 'f', 4)
+                    .arg(pos.y(), 0, 'f', 4);
+#endif
     }
     return QwtText(text);
 }

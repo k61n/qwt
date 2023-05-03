@@ -139,7 +139,7 @@ QwtScaleMap &QwtScaleMap::operator=(const QwtScaleMap &other)
 void QwtScaleMap::setTransformation(
     QwtScaleTransformation *transformation)
 {
-    if ( transformation == NULL )
+    if ( transformation == nullptr )
         return;
 
     delete d_transformation;

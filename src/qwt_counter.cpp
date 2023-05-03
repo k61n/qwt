@@ -150,7 +150,11 @@ QwtCounter::~QwtCounter()
 */
 void QwtCounter::polish()
 {
+#if QT_VERSION < 0x050f00
     const int w = d_data->valueEdit->fontMetrics().width("W") + 8;
+#else
+    const int w = d_data->valueEdit->fontMetrics().horizontalAdvance("W") + 8;
+#endif
 
     for ( int i = 0; i < ButtonCnt; i++ )
     {
@@ -330,8 +334,13 @@ void QwtCounter::wheelEvent(QWheelEvent *e)
         
     for ( int i = 0; i < d_data->nButtons; i++ )
     {
+#if QT_VERSION < 0x050f00
         if ( d_data->buttonDown[i]->geometry().contains(e->pos()) ||
-            d_data->buttonUp[i]->geometry().contains(e->pos()) )
+             d_data->buttonUp[i]->geometry().contains(e->pos()) )
+#else
+        if ( d_data->buttonDown[i]->geometry().contains(e->position().toPoint()) ||
+            d_data->buttonUp[i]->geometry().contains(e->position().toPoint()) )
+#endif
         {
             increment = d_data->increment[i];
         }
@@ -339,7 +348,11 @@ void QwtCounter::wheelEvent(QWheelEvent *e)
 
     const int wheel_delta = 120;
 
+#if QT_VERSION < 0x050f00
     int delta = e->delta();
+#else
+    int delta = e->angleDelta().y();
+#endif
     if ( delta >= 2 * wheel_delta )
         delta /= 2; // Never saw an abs(delta) < 240
 
@@ -398,7 +411,7 @@ void QwtCounter::valueChange()
     if ( isValid() )
         showNum(value());
     else
-        d_data->valueEdit->setText(QString::null);
+        d_data->valueEdit->setText(QString());
 
     updateButtons();
 
@@ -535,7 +548,11 @@ QSize QwtCounter::sizeHint() const
     tmp.fill('9', w);
 
     QFontMetrics fm(d_data->valueEdit->font());
+#if QT_VERSION < 0x050f00
     w = fm.width(tmp) + 2;
+#else
+    w = fm.horizontalAdvance(tmp) + 2;
+#endif
 #if QT_VERSION >= 0x040000
     if ( d_data->valueEdit->hasFrame() )
         w += 2 * style()->pixelMetric(QStyle::PM_DefaultFrameWidth);

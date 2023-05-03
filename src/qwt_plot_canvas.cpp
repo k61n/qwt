@@ -31,7 +31,7 @@ public:
     PrivateData():
         focusIndicator(NoFocusIndicator),
         paintAttributes(0),
-        cache(NULL)
+        cache(nullptr)
     {
     }
 
@@ -84,7 +84,7 @@ QwtPlot *QwtPlotCanvas::plot()
     if ( w && w->inherits("QwtPlot") )
         return (QwtPlot *)w;
 
-    return NULL;
+    return nullptr;
 }
 
 //! Return parent plot widget
@@ -94,7 +94,7 @@ const QwtPlot *QwtPlotCanvas::plot() const
     if ( w && w->inherits("QwtPlot") )
         return (QwtPlot *)w;
 
-    return NULL;
+    return nullptr;
 }
 
 /*!
@@ -123,20 +123,24 @@ void QwtPlotCanvas::setPaintAttribute(PaintAttribute attribute, bool on)
         {
             if ( on )
             {
-                if ( d_data->cache == NULL )
+                if ( d_data->cache == nullptr )
                     d_data->cache = new QPixmap();
 
                 if ( isVisible() )
                 {
                     const QRect cr = contentsRect();
+#if QT_VERSION < 0x050f00
                     *d_data->cache = QPixmap::grabWidget(this,
                         cr.x(), cr.y(), cr.width(), cr.height() );
+#else
+                    *d_data->cache = QWidget::grab(QRect(cr.x(), cr.y(), cr.width(), cr.height()));
+#endif
                 }
             }
             else
             {
                 delete d_data->cache;
-                d_data->cache = NULL;
+                d_data->cache = nullptr;
             }
             break;
         }
@@ -326,7 +330,14 @@ void QwtPlotCanvas::drawCanvas(QPainter *painter)
             bgPainter.drawRect(d_data->cache->rect());
         }
         else
+#if QT_VERSION < 0x050f00
             d_data->cache->fill(this, d_data->cache->rect().topLeft());
+#else
+            {
+            QPainter painter(d_data->cache);
+            painter.fillRect(d_data->cache->rect(), QColor(Qt::white));
+        }
+#endif
 
         QPainter cachePainter(d_data->cache);
         cachePainter.translate(-contentsRect().x(),

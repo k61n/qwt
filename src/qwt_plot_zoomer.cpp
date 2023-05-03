@@ -206,7 +206,7 @@ QwtDoubleRect QwtPlotZoomer::zoomBase() const
 void QwtPlotZoomer::setZoomBase(bool doReplot)
 {
     QwtPlot *plt = plot();
-    if ( plt == NULL )
+    if ( plt == nullptr )
         return;
 
     if ( doReplot )
