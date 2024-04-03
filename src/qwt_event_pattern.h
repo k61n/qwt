@@ -37,13 +37,13 @@ public:
       - MouseSelect2\n
         Qt::RightButton
       - MouseSelect3\n
-        Qt::MidButton
+        Qt::MiddleButton
       - MouseSelect4\n
         Qt::LeftButton + Qt::ShiftButton
       - MouseSelect5\n
         Qt::RightButton + Qt::ShiftButton
       - MouseSelect6\n
-        Qt::MidButton + Qt::ShiftButton
+        Qt::MiddleButton + Qt::ShiftButton
 
       The default initialization for 2 button mice is:
       - MouseSelect1\n

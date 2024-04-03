@@ -436,7 +436,7 @@ void QwtPlotZoomer::setAxis(int xAxis, int yAxis)
 }
 
 /*!
-   Qt::MidButton zooms out one position on the zoom stack,
+   Qt::MiddleButton zooms out one position on the zoom stack,
    Qt::RightButton to the zoom base.
 
    Changes the current position on the stack, but doesn't pop
