@@ -14,14 +14,15 @@
 #include <qwmatrix.h>
 #define QwtMatrix QWMatrix
 #elif QT_VERSION < 0x050f00
+#include <QDesktopWidget>
 #include <qmatrix.h>
 #define QwtMatrix QMatrix
 #else
+#include <QScreen>
 #include <QTransform>
 #define QwtMatrix QTransform
 #endif
 #include <qpaintdevice.h>
-#include <qdesktopwidget.h>
 #include "qwt_math.h"
 #include "qwt_polygon.h"
 #include "qwt_layout_metrics.h"
@@ -85,7 +86,12 @@ QwtMetricsMap::QwtMetricsMap()
 void QwtMetricsMap::setMetrics(const QPaintDevice *layoutDevice,
     const QPaintDevice *paintDevice)
 {
+#if QT_VERSION < 0x050f00
     const QSize screenDpi = deviceDpi(QApplication::desktop());
+#else
+    const QSize screenDpi = QSize(static_cast<int>(QGuiApplication::primaryScreen()->logicalDotsPerInchX()),
+                                  static_cast<int>(QGuiApplication::primaryScreen()->logicalDotsPerInchY()));
+#endif
     const QSize layoutDpi = deviceDpi(layoutDevice);
     const QSize paintDpi = deviceDpi(paintDevice);
 
