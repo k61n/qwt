@@ -1,0 +1,44 @@
+stages:
+  - build
+
+ubuntu18.04:
+  stage: build
+  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/bionic:0.0.11
+  script:
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_BUILD_TYPE=Release
+    - cmake --build .
+
+ubuntu22.04:
+  stage: build
+  only:
+    - branches
+  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/jammy:0.0.10
+  script:
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_BUILD_TYPE=Release
+    - cmake --build .
+
+macos-arm64:
+  stage: build
+  tags:
+    - darwin, arm64, ventura
+  script:
+    - mkdir build && cd build
+    - /opt/homebrew/bin/cmake ..
+      -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt@5
+    - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
+
+win-x64:
+  stage: build
+  tags:
+    - win, x64
+  script:
+    - mkdir build
+    - cd build
+    - cmake.exe .. -G "Unix Makefiles"
+      -DCMAKE_MAKE_PROGRAM="C:/Qt/Tools/mingw810_64/bin/mingw32-make.exe"
+      -DCMAKE_C_COMPILER="C:/Qt/Tools/mingw810_64/bin/gcc.exe"
+      -DCMAKE_CXX_COMPILER="C:/Qt/Tools/mingw810_64/bin/g++.exe"
+      -DCMAKE_PREFIX_PATH="C:/Qt/5.15.2/mingw81_64"
+    - cmake.exe --build . --parallel $env:NUMBER_OF_PROCESSORS
