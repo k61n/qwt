@@ -25,14 +25,7 @@
 #include "qwt_symbol.h"
 #include "qwt_plot_curve.h"
 
-#if QT_VERSION < 0x040000
-#include <qguardedptr.h>
-#else
 #include <qpointer.h>
-#endif
-
-#if QT_VERSION >= 0x040000
-
 #include <qevent.h>
 #include <qpaintengine.h>
 
@@ -60,8 +53,6 @@ private:
     int _from;
     int _to;
 };
-
-#endif // QT_VERSION >= 0x040000
 
 // Creating and initializing a QPainter is an
 // expensive operation. So we keep an painter
@@ -96,11 +87,7 @@ public:
             it = _map.insert(_canvas, painter);
             _canvas->installEventFilter(this);
         }
-#if QT_VERSION < 0x040000
-        return it.data();
-#else
         return it.value();
-#endif
     }
 
     void end()
@@ -111,12 +98,7 @@ public:
             if ( it != _map.end() )
             {
                 _canvas->removeEventFilter(this);
-
-#if QT_VERSION < 0x040000
-                delete it.data();
-#else
                 delete it.value();
-#endif
                 _map.erase(it);
             }
         }
@@ -131,11 +113,7 @@ public:
     }
 
 private:
-#if QT_VERSION < 0x040000
-    QGuardedPtr<QwtPlotCanvas> _canvas;
-#else
     QPointer<QwtPlotCanvas> _canvas;
-#endif
     static QMap<QwtPlotCanvas *, QPainter *> _map;
 };
 
@@ -448,11 +426,7 @@ void QwtPlotCurve::setData(const QwtArray<double> &xData,
   \param data Data
   \note Internally the data is stored in a QwtPolygonFData object
 */
-#if QT_VERSION < 0x040000
-void QwtPlotCurve::setData(const QwtArray<QwtDoublePoint> &data)
-#else
 void QwtPlotCurve::setData(const QPolygonF &data)
-#endif
 {
     delete d_xy;
     d_xy = new QwtPolygonFData(data);
@@ -548,26 +522,7 @@ void QwtPlotCurve::draw(int from, int to) const
 
     QwtPlotCanvas *canvas = plot()->canvas();
 
-#if QT_VERSION >= 0x040000
-#if 0
-    if ( canvas->paintEngine()->type() == QPaintEngine::OpenGL )
-    {
-        /*
-            OpenGL alway repaint the complete widget.
-            So for this operation OpenGL is one of the slowest
-            environments.
-         */
-        canvas->repaint();
-        return;
-    }
-#endif
-
-    if ( !canvas->testAttribute(Qt::WA_WState_InPaintEvent) &&
-#if QT_VERSION >= 0x050000
-        !canvas->testAttribute(Qt::WA_PaintOnScreen) )
-#else //QT_VERSION < 0x050000
-        !canvas->testAttribute(Qt::WA_PaintOutsidePaintEvent) )
-#endif
+    if ( !canvas->testAttribute(Qt::WA_WState_InPaintEvent) && !canvas->testAttribute(Qt::WA_PaintOnScreen) )
     {
         /*
           We save curve and range in helper and call repaint.
@@ -587,7 +542,6 @@ void QwtPlotCurve::draw(int from, int to) const
 
         return;
     }
-#endif
 
     const QwtScaleMap xMap = plot()->canvasMap(xAxis());
     const QwtScaleMap yMap = plot()->canvasMap(yAxis());
@@ -602,7 +556,6 @@ void QwtPlotCurve::draw(int from, int to) const
         draw(&cachePainter, xMap, yMap, from, to);
     }
 
-#if QT_VERSION >= 0x040000
     if ( canvas->testAttribute(Qt::WA_WState_InPaintEvent) )
     {
         QPainter painter(canvas);
@@ -613,7 +566,6 @@ void QwtPlotCurve::draw(int from, int to) const
         draw(&painter, xMap, yMap, from, to);
     }
     else
-#endif
     {
         QPainter *painter = d_data->guardedPainter.begin(canvas);
         draw(painter, xMap, yMap, from, to);
@@ -1287,11 +1239,7 @@ void QwtPlotCurve::updateLegend(QwtLegend *legend) const
 
     QwtLegendItem *legendItem = (QwtLegendItem *)widget;
 
-#if QT_VERSION < 0x040000
-    const bool doUpdate = legendItem->isUpdatesEnabled();
-#else
     const bool doUpdate = legendItem->updatesEnabled();
-#endif
     legendItem->setUpdatesEnabled(false);
 
     const int policy = legend->displayPolicy();

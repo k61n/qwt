@@ -25,7 +25,6 @@ set(SOURCES
     src/qwt_dial.cpp
     src/qwt_double_interval.cpp
     src/qwt_double_range.cpp
-    src/qwt_double_rect.cpp
     src/qwt_dyngrid_layout.cpp
     src/qwt_event_pattern.cpp
     src/qwt_interval_data.cpp
@@ -35,7 +34,6 @@ set(SOURCES
     src/qwt_legend.cpp
     src/qwt_magnifier.cpp
     src/qwt_math.cpp
-    src/qwt_paint_buffer.cpp
     src/qwt_painter.cpp
     src/qwt_panner.cpp
     src/qwt_picker_machine.cpp
@@ -108,7 +106,6 @@ set(HEADERS
     src/qwt_legend.h
     src/qwt_magnifier.h
     src/qwt_math.h
-    src/qwt_paint_buffer.h
     src/qwt_painter.h
     src/qwt_panner.h
     src/qwt_picker_machine.h

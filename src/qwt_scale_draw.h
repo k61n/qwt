@@ -10,10 +10,7 @@
 #ifndef QWT_SCALE_DRAW_H
 #define QWT_SCALE_DRAW_H
 
-#if QT_VERSION < 0x040000
-#include <qwmatrix.h>
-#define QwtMatrix QWMatrix
-#elif QT_VERSION < 0x050f00
+#if QT_VERSION < 0x050f00
 #include <qmatrix.h>
 #define QwtMatrix QMatrix
 #else
@@ -72,13 +69,8 @@ public:
     QPoint pos() const;
     int length() const;
 
-#if QT_VERSION < 0x040000
-    void setLabelAlignment(int);
-    int labelAlignment() const;
-#else
     void setLabelAlignment(Qt::Alignment);
     Qt::Alignment labelAlignment() const;
-#endif
 
     void setLabelRotation(double rotation);
     double labelRotation() const;
@@ -94,12 +86,7 @@ public:
     QRect boundingLabelRect(const QFont &, double val) const;
 
 protected:
-
-#if QT_VERSION < 0x040000
-    QWMatrix labelMatrix(const QPoint &, const QSize &) const;
-#else   
     QwtMatrix labelMatrix(const QPoint &, const QSize &) const;
-#endif  
 
     virtual void drawTick(QPainter *p, double val, int len) const;
     virtual void drawBackbone(QPainter *p) const;

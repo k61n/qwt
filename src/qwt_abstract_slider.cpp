@@ -9,9 +9,9 @@
 
 #include <qevent.h>
 #if QT_VERSION < 0x050f00
-    #include <qdatetime.h>
+#include <qdatetime.h>
 #else
-    #include <QElapsedTimer>
+#include <QElapsedTimer>
 #endif
 #include "qwt_abstract_slider.h"
 #include "qwt_math.h"
@@ -66,9 +66,7 @@ QwtAbstractSlider::QwtAbstractSlider(
     d_data = new QwtAbstractSlider::PrivateData;
     d_data->orientation = orientation;
 
-#if QT_VERSION >= 0x040000
     using namespace Qt;
-#endif
     setFocusPolicy(TabFocus);
 }
 

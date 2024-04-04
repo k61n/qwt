@@ -71,14 +71,8 @@ public:
     virtual void draw(QPainter *, const QPoint &center, int radius, 
         double north, QPalette::ColorGroup = QPalette::Active) const;
 
-    static void drawRose(QPainter *, 
-#if QT_VERSION < 0x040000
-        const QColorGroup &,
-#else
-        const QPalette &,
-#endif
-        const QPoint &center, int radius, double origin, double width, 
-        int numThorns, int numThornLevels, double shrinkFactor);
+    static void drawRose(QPainter *, const QPalette &, const QPoint &center, int radius, double origin, double width,
+                         int numThorns, int numThornLevels, double shrinkFactor);
 
 private:
     double d_width;     

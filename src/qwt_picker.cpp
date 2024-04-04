@@ -17,12 +17,8 @@
 #include "qwt_painter.h"
 #include "qwt_picker_machine.h"
 #include "qwt_picker.h"
-#if QT_VERSION < 0x040000
-#include <qguardedptr.h>
-#else
 #include <qpointer.h>
 #include <qpaintengine.h>
-#endif
 
 class QwtPicker::PickerWidget: public QWidget
 {
@@ -79,14 +75,9 @@ public:
       In case of (f.e) a CrossRubberBand and a text this creates complete
       repaints of the widget. So we better use two different widgets.
      */
-     
-#if QT_VERSION < 0x040000
-    QGuardedPtr<PickerWidget> rubberBandWidget;
-    QGuardedPtr<PickerWidget> trackerWidget;
-#else
+
     QPointer<PickerWidget> rubberBandWidget;
     QPointer<PickerWidget> trackerWidget;
-#endif
 };
 
 QwtPicker::PickerWidget::PickerWidget(
@@ -96,15 +87,9 @@ QwtPicker::PickerWidget::PickerWidget(
     d_picker(picker),
     d_type(type)
 {
-#if QT_VERSION >= 0x040000
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_NoSystemBackground);
     setFocusPolicy(Qt::NoFocus);
-#else
-    setBackgroundMode(Qt::NoBackground);
-    setFocusPolicy(QWidget::NoFocus);
-    setMouseTracking(true);
-#endif
     hide();
 }
 
@@ -129,20 +114,10 @@ void QwtPicker::PickerWidget::updateMask()
     if ( d_type == Text )
     {
         d_hasTextMask = true;
-#if QT_VERSION >= 0x040300
         if ( !parentWidget()->testAttribute(Qt::WA_PaintOnScreen) )
         {
-#if 0
-            if ( parentWidget()->paintEngine()->type() != QPaintEngine::OpenGL )
-#endif
-            {
-                // With Qt >= 4.3 drawing of the tracker can be implemented in an
-                // easier way, using the textRect as mask. 
-
-                d_hasTextMask = false;
-            }
+            d_hasTextMask = false;
         }
-#endif
         
         if ( d_hasTextMask )
         {
@@ -151,9 +126,7 @@ void QwtPicker::PickerWidget::updateMask()
             if ( label.testPaintAttribute(QwtText::PaintBackground)
                 && label.backgroundBrush().style() != Qt::NoBrush )
             {
-#if QT_VERSION >= 0x040300
                 if ( label.backgroundBrush().color().alpha() > 0 )
-#endif
                 // We don't need a text mask, when we have a background
                 d_hasTextMask = false;
             }
@@ -181,29 +154,8 @@ void QwtPicker::PickerWidget::updateMask()
         }
     }
 
-#if QT_VERSION < 0x040000
-    QWidget *w = parentWidget();
-    const bool doUpdate = w->isUpdatesEnabled();
-    const Qt::BackgroundMode bgMode = w->backgroundMode();
-    w->setUpdatesEnabled(false);
-    if ( bgMode != Qt::NoBackground )
-        w->setBackgroundMode(Qt::NoBackground);
-#endif
-
     setMask(mask);
-
-#if QT_VERSION < 0x040000
-    if ( bgMode != Qt::NoBackground )
-        w->setBackgroundMode(bgMode);
-
-    w->setUpdatesEnabled(doUpdate);
-#endif
-
-#if QT_VERSION >= 0x050000
     setVisible(!mask.isEmpty());
-#else //QT_VERSION < 0x050000
-    setShown(!mask.isEmpty());
-#endif
 }
 
 void QwtPicker::PickerWidget::paintEvent(QPaintEvent *e)
@@ -224,13 +176,6 @@ void QwtPicker::PickerWidget::paintEvent(QPaintEvent *e)
            the mask. This gives better results for antialiased fonts.
          */
         bool doDrawTracker = !d_hasTextMask;
-#if QT_VERSION < 0x040000
-        if ( !doDrawTracker && QPainter::redirect(this) )
-        {
-            // setMask + painter redirection doesn't work
-            doDrawTracker = true;
-        }
-#endif
         if ( doDrawTracker )
         {
             painter.setPen(d_picker->trackerPen());
@@ -304,13 +249,8 @@ void QwtPicker::init(QWidget *parent, int selectionFlags,
 
     if ( parent )
     {
-#if QT_VERSION >= 0x040000
         if ( parent->focusPolicy() == Qt::NoFocus )
             parent->setFocusPolicy(Qt::WheelFocus);
-#else
-        if ( parent->focusPolicy() == QWidget::NoFocus )
-            parent->setFocusPolicy(QWidget::WheelFocus);
-#endif
 
         d_data->trackerFont = parent->font();
         d_data->mouseTracking = parent->hasMouseTracking();
@@ -730,11 +670,7 @@ void QwtPicker::drawRubberBand(QPainter *painter) const
             p1.setY(p1.y() - radius);
         }
 
-#if QT_VERSION < 0x040000
-        const QRect rect = QRect(p1, p2).normalize();
-#else
         const QRect rect = QRect(p1, p2).normalized();
-#endif
         switch(rubberBand())
         {
             case EllipseRubberBand:
@@ -773,13 +709,7 @@ void QwtPicker::drawTracker(QPainter *painter) const
 
 #if defined(Q_WS_MAC)
             // Antialiased fonts are broken on the Mac.
-#if QT_VERSION >= 0x040000 
             painter->setRenderHint(QPainter::TextAntialiasing, false);
-#else
-            QFont fnt = label.usedFont(painter->font());
-            fnt.setStyleStrategy(QFont::NoAntialias);
-            label.setFont(fnt);
-#endif
 #endif
             label.draw(painter, textRect);
 
@@ -1410,11 +1340,7 @@ void QwtPicker::updateDisplay()
         }
     }
 
-#if QT_VERSION < 0x040000
-    QGuardedPtr<PickerWidget> &rw = d_data->rubberBandWidget;
-#else
     QPointer<PickerWidget> &rw = d_data->rubberBandWidget;
-#endif
     if ( showRubberband )
     {
         if ( rw.isNull() )
@@ -1428,11 +1354,7 @@ void QwtPicker::updateDisplay()
     else
         delete rw;
 
-#if QT_VERSION < 0x040000
-    QGuardedPtr<PickerWidget> &tw = d_data->trackerWidget;
-#else
     QPointer<PickerWidget> &tw = d_data->trackerWidget;
-#endif
     if ( showTracker )
     {
         if ( tw.isNull() )

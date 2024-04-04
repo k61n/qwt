@@ -127,10 +127,6 @@ public:
     };
 
     explicit QwtDial( QWidget *parent = nullptr);
-#if QT_VERSION < 0x040000
-    explicit QwtDial( QWidget *parent, const char *name);
-#endif
-
     virtual ~QwtDial();
 
     void setFrameShadow(Shadow);

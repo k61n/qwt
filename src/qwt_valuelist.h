@@ -18,40 +18,8 @@
   \def QwtValueList
  */
 
-#if QT_VERSION < 0x040000
-
-#include <qvaluelist.h>
-
-#if defined(QWT_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QValueList<double>;
-// MOC_SKIP_END
-#endif
-
-typedef QValueList<double> QwtValueList;
-
-#else // QT_VERSION >= 0x040000
-
 #include <qlist.h>
 
-#if defined(QWT_TEMPLATEDLL)
-
-#if QT_VERSION < 0x040300
-// Some compilers have problems, 
-// without a qHash(double) implementation
-#include <qset.h>
-#include <qvector.h>
-inline uint qHash(double key) { return uint(key); }
-#endif
-
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QList<double>;
-// MOC_SKIP_END
-
-#endif // QWT_TEMPLATEDLL
-
 typedef QList<double> QwtValueList;
-
-#endif
 
 #endif

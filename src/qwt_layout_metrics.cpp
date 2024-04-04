@@ -9,11 +9,7 @@
 
 #include <qapplication.h>
 #include <qpainter.h>
-#if QT_VERSION < 0x040000
-#include <qpaintdevicemetrics.h>
-#include <qwmatrix.h>
-#define QwtMatrix QWMatrix
-#elif QT_VERSION < 0x050f00
+#if QT_VERSION < 0x050f00
 #include <QDesktopWidget>
 #include <qmatrix.h>
 #define QwtMatrix QMatrix
@@ -30,30 +26,13 @@
 static QSize deviceDpi(const QPaintDevice *device)
 {
     QSize dpi;
-#if QT_VERSION < 0x040000
-    const QPaintDeviceMetrics metrics(device);
-    dpi.setWidth(metrics.logicalDpiX());
-    dpi.setHeight(metrics.logicalDpiY());
-#else
     dpi.setWidth(device->logicalDpiX());
     dpi.setHeight(device->logicalDpiY());
-#endif
 
     return dpi;
 }
 
-#if QT_VERSION < 0x040000
-
-inline static const QWMatrix &matrix(const QPainter *painter)
-{
-    return painter->worldMatrix();
-}
-inline static QWMatrix invMatrix(const QPainter *painter)
-{
-    return painter->worldMatrix().invert();
-}
-
-#elif QT_VERSION < 0x050f00
+#if QT_VERSION < 0x050f00
 
 inline static const QMatrix &matrix(const QPainter *painter)
 {

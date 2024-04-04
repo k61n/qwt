@@ -21,11 +21,7 @@
 #include "qwt_text_label.h"
 #include "qwt_plot_printfilter.h"
 
-#if QT_VERSION < 0x040000
-typedef QColorGroup Palette;
-#else
 typedef QPalette Palette;
-#endif
 
 class QwtPlotPrintFilter::PrivateData
 {
@@ -198,15 +194,8 @@ void QwtPlotPrintFilter::apply(QwtPlot *plot) const
     }
     if ( plot->legend() )
     {
-#if QT_VERSION < 0x040000
-        QValueList<QWidget *> list = plot->legend()->legendItems();
-        for ( QValueListIterator<QWidget *> it = list.begin();
-            it != list.end(); ++it )
-#else
         QList<QWidget *> list = plot->legend()->legendItems();
-        for ( QList<QWidget*>::iterator it = list.begin();
-            it != list.end(); ++it )
-#endif
+        for ( QList<QWidget*>::iterator it = list.begin(); it != list.end(); ++it )
         {
             QWidget *w = *it;
 
@@ -424,15 +413,8 @@ void QwtPlotPrintFilter::reset(QwtPlot *plot) const
 
     if ( plot->legend() )
     {
-#if QT_VERSION < 0x040000
-        QValueList<QWidget *> list = plot->legend()->legendItems();
-        for ( QValueListIterator<QWidget *> it = list.begin();
-            it != list.end(); ++it )
-#else
         QList<QWidget *> list = plot->legend()->legendItems();
-        for ( QList<QWidget*>::iterator it = list.begin();
-            it != list.end(); ++it )
-#endif
+        for ( QList<QWidget*>::iterator it = list.begin(); it != list.end(); ++it )
         {
             QWidget *w = *it;
 

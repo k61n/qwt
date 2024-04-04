@@ -14,22 +14,12 @@
 
 #include "qwt_global.h"
 
+#include <qpolygon.h>
+
 /*!
   \def QwtPolygon
  */
-
-#if QT_VERSION < 0x040000
-#include <qpointarray.h>
-#include "qwt_double_rect.h"
-
-typedef QPointArray QwtPolygon;
-typedef QMemArray<QwtDoublePoint> QwtPolygonF;
-
-#else
-
-#include <qpolygon.h>
 typedef QPolygon QwtPolygon;
 typedef QPolygonF QwtPolygonF;
-#endif
 
 #endif

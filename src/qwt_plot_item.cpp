@@ -20,9 +20,7 @@ public:
         plot(nullptr),
         isVisible(true),
         attributes(0),
-#if QT_VERSION >= 0x040000
         renderHints(0),
-#endif
         z(0.0),
         xAxis(QwtPlot::xBottom),
         yAxis(QwtPlot::yLeft)
@@ -33,9 +31,7 @@ public:
 
     bool isVisible;
     int attributes;
-#if QT_VERSION >= 0x040000
     int renderHints;
-#endif
     double z;
 
     int xAxis;
@@ -229,8 +225,6 @@ bool QwtPlotItem::testItemAttribute(ItemAttribute attribute) const
     return d_data->attributes & attribute;
 }
 
-#if QT_VERSION >= 0x040000
-
 /*!
    Toggle an render hint
  
@@ -263,8 +257,6 @@ bool QwtPlotItem::testRenderHint(RenderHint hint) const
 {
     return (d_data->renderHints & hint);
 }
-
-#endif
 
 //! Show the item
 void QwtPlotItem::show()
@@ -528,17 +520,10 @@ QRect QwtPlotItem::paintRect(const QwtScaleMap &xMap,
 QRect QwtPlotItem::transform(const QwtScaleMap &xMap, 
     const QwtScaleMap &yMap, const QwtDoubleRect& rect) const
 {
-#if QT_VERSION >= 0x050000
     int x1 = xMap.transform(rect.left());
     int x2 = xMap.transform(rect.right());
     int y1 = yMap.transform(rect.top());
     int y2 = yMap.transform(rect.bottom());
-#else //QT_VERSION < 0x050000
-    int x1 = qRound(xMap.transform(rect.left()));
-    int x2 = qRound(xMap.transform(rect.right()));
-    int y1 = qRound(yMap.transform(rect.top()));
-    int y2 = qRound(yMap.transform(rect.bottom()));
-#endif
 
     if ( x2 < x1 )
         qSwap(x1, x2);

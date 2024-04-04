@@ -18,7 +18,6 @@
 #include "qwt_painter.h"
 #include "qwt_text_engine.h"
 #include "qwt_text.h"
-#if QT_VERSION >= 0x040000
 #include <QApplication>
 #if QT_VERSION < 0x050f00
 #include <QDesktopWidget>
@@ -42,11 +41,7 @@ private:
 
     inline const QwtTextEngine *engine(EngineMap::const_iterator &it) const 
     {
-#if QT_VERSION < 0x040000
-        return it.data();
-#else
         return it.value();
-#endif
     }
 
     EngineMap d_map;
@@ -468,9 +463,6 @@ int QwtText::heightForWidth(int width, const QFont &defaultFont) const
     const QwtMetricsMap map = QwtPainter::metricsMap();
     width = map.layoutToScreenX(width);
 
-#if QT_VERSION < 0x040000
-    const QFont font = usedFont(defaultFont);
-#else
     // We want to calculate in screen metrics. So
     // we need a font that uses screen metrics
 #if QT_VERSION < 0x050f00

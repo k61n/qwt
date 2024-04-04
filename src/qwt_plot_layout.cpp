@@ -1130,11 +1130,7 @@ void QwtPlotLayout::activate(const QwtPlot *plot,
         // subtract d_data->legendRect from rect
 
         const QRegion region(rect);
-#if QT_VERSION >= 0x050000
         rect = region.subtracted(d_data->legendRect).boundingRect();
-#else //QT_VERSION < 0x050000
-        rect = region.subtract(d_data->legendRect).boundingRect();
-#endif
 
         if ( d_data->layoutData.legend.frameWidth && 
             !(options & IgnoreFrames ) )
@@ -1245,11 +1241,7 @@ void QwtPlotLayout::activate(const QwtPlot *plot,
                     scaleRect.setHeight(dim);
                     break;
             }
-#if QT_VERSION < 0x040000
-            scaleRect = scaleRect.normalize();
-#else
             scaleRect = scaleRect.normalized();
-#endif
         }
     }
 

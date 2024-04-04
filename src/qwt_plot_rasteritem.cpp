@@ -10,15 +10,10 @@
 #include <qapplication.h>
 #include <qpaintdevice.h>
 #include <qpainter.h>
-<<<<<<< Updated upstream
-#if QT_VERSION > 0x050f00
-    #include <QScreen>
-=======
 #if QT_VERSION < 0x050f00
 #include <QDesktopWidget>
 #else
 #include <QScreen>
->>>>>>> Stashed changes
 #endif
 #include "qwt_legend.h"
 #include "qwt_legend_item.h"
@@ -50,12 +45,7 @@ static QImage toRgba(const QImage& image, int alpha)
     if ( alpha < 0 || alpha >= 255 )  
         return image;
 
-#if QT_VERSION < 0x040000
-    QImage alphaImage(image.size(), 32);
-    alphaImage.setAlphaBuffer(true);
-#else
     QImage alphaImage(image.size(), QImage::Format_ARGB32);
-#endif
 
     const QRgb mask1 = qRgba(0, 0, 0, alpha);
     const QRgb mask2 = qRgba(255, 255, 255, 0);

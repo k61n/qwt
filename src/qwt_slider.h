@@ -77,10 +77,7 @@ public:
     explicit QwtSlider(QWidget *parent,
           Qt::Orientation = Qt::Horizontal,
           ScalePos = NoScale, BGSTYLE bgStyle = BgTrough);
-#if QT_VERSION < 0x040000
-    explicit QwtSlider(QWidget *parent, const char *name);
-#endif
-    
+
     virtual ~QwtSlider();
 
     virtual void setOrientation(Qt::Orientation); 

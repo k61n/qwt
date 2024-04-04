@@ -24,14 +24,8 @@ class QWidget;
 class QwtScaleMap;
 class QwtColorMap;
 class QwtDoubleInterval;
-
-#if QT_VERSION < 0x040000
-class QColorGroup;
-class QSimpleRichText;
-#else
 class QPalette;
 class QTextDocument;
-#endif
 
 #if defined(Q_WS_X11)
 // Warning: QCOORD_MIN, QCOORD_MAX are wrong on X11.
@@ -85,13 +79,8 @@ public:
         int flags, const QString &);
 
 #ifndef QT_NO_RICHTEXT
-#if QT_VERSION < 0x040000
-    static void drawSimpleRichText(QPainter *, const QRect &,
-        int flags, QSimpleRichText &);
-#else
     static void drawSimpleRichText(QPainter *, const QRect &,
         int flags, QTextDocument &);
-#endif
 #endif
 
     static void drawRect(QPainter *, int x, int y, int w, int h);
@@ -110,24 +99,13 @@ public:
     static void drawPoint(QPainter *, int x, int y);
     static void drawPoint(QPainter *, double x, double y);
 
-#if QT_VERSION < 0x040000
-    static void drawRoundFrame(QPainter *, const QRect &,
-        int width, const QColorGroup &cg, bool sunken);
-#else
-    static void drawRoundFrame(QPainter *, const QRect &,
-        int width, const QPalette &, bool sunken);
-#endif
+    static void drawRoundFrame(QPainter *, const QRect &, int width, const QPalette &, bool sunken);
     static void drawFocusRect(QPainter *, QWidget *);
     static void drawFocusRect(QPainter *, QWidget *, const QRect &);
 
     static void drawColorBar(QPainter *painter,
         const QwtColorMap &, const QwtDoubleInterval &,
         const QwtScaleMap &, Qt::Orientation, const QRect &);
-
-#if QT_VERSION < 0x040000
-    static void setSVGMode(bool on);
-    static bool isSVGMode();
-#endif
 
     static QPen scaledPen(const QPen &);
 
@@ -137,9 +115,6 @@ private:
 
     static bool d_deviceClipping;
     static QwtMetricsMap d_metricsMap;
-#if QT_VERSION < 0x040000
-    static bool d_SVGMode;
-#endif
 };
 
 //!  Wrapper for QPainter::drawLine()
