@@ -19,8 +19,11 @@
 #include "qwt_text_engine.h"
 #include "qwt_text.h"
 #if QT_VERSION >= 0x040000
-#include <qapplication.h>
-#include <qdesktopwidget.h>
+#include <QApplication>
+#if QT_VERSION < 0x050f00
+#include <QDesktopWidget>
+#else
+#include <QScreen>
 #endif
 
 class QwtTextEngineDict
@@ -470,8 +473,11 @@ int QwtText::heightForWidth(int width, const QFont &defaultFont) const
 #else
     // We want to calculate in screen metrics. So
     // we need a font that uses screen metrics
-
+#if QT_VERSION < 0x050f00
     const QFont font(usedFont(defaultFont), QApplication::desktop());
+#else
+    QFont font(usedFont(defaultFont));
+    font.setPointSizeF(font.pointSizeF() * QGuiApplication::primaryScreen()->logicalDotsPerInch() / 72.0);
 #endif
 
     int h = 0;
@@ -516,8 +522,12 @@ QSize QwtText::textSize(const QFont &defaultFont) const
 {
     // We want to calculate in screen metrics. So
     // we need a font that uses screen metrics
-
+#if QT_VERSION < 0x050f00
     const QFont font(usedFont(defaultFont), QApplication::desktop());
+#else
+    QFont font(usedFont(defaultFont));
+    font.setPointSizeF(font.pointSizeF() * QGuiApplication::primaryScreen()->logicalDotsPerInch() / 72.0);
+#endif
 
     if ( !d_layoutCache->textSize.isValid() 
         || d_layoutCache->font != font )
@@ -583,8 +593,12 @@ void QwtText::draw(QPainter *painter, const QRect &rect) const
     {
         // We want to calculate in screen metrics. So
         // we need a font that uses screen metrics
-
+#if QT_VERSION < 0x050f00
         const QFont font(painter->font(), QApplication::desktop());
+#else
+        QFont font(painter->font());
+        font.setPointSizeF(font.pointSizeF() * QGuiApplication::primaryScreen()->logicalDotsPerInch() / 72.0);
+#endif
 
         int left, right, top, bottom;
         d_data->textEngine->textMargins(

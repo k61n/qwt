@@ -8,11 +8,17 @@
  *****************************************************************************/
 
 #include <qapplication.h>
-#include <qdesktopwidget.h>
 #include <qpaintdevice.h>
 #include <qpainter.h>
+<<<<<<< Updated upstream
 #if QT_VERSION > 0x050f00
     #include <QScreen>
+=======
+#if QT_VERSION < 0x050f00
+#include <QDesktopWidget>
+#else
+#include <QScreen>
+>>>>>>> Stashed changes
 #endif
 #include "qwt_legend.h"
 #include "qwt_legend_item.h"
