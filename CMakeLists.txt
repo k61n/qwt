@@ -6,7 +6,24 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Core Svg Widgets REQUIRED)
+if (${PREFER_QT})
+    if (${PREFER_QT} EQUAL 6)
+        find_package(Qt6 COMPONENTS Core Svg Widgets REQUIRED)
+        set(V 6)
+    elseif (${PREFER_QT} EQUAL 5)
+        find_package(Qt5 COMPONENTS Core Svg Widgets REQUIRED)
+        set(V 5)
+    endif ()
+else ()
+    find_package(Qt6 COMPONENTS Core Svg Widgets QUIET)
+    if (${Qt6_FOUND})
+        set(V 6)
+    else ()
+        find_package(Qt5 COMPONENTS Core Svg Widgets REQUIRED)
+        set(V 5)
+    endif ()
+endif ()
+message("-- Found Qt${V}")
 
 set(SOURCES
     src/qwt_abstract_scale_draw.cpp
@@ -149,7 +166,7 @@ set(HEADERS
 
 add_library(qwt ${SOURCES} ${HEADERS})
 target_include_directories(qwt PUBLIC ${Qt5Core_INCLUDE_DIRS} ${Qt5Svg_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
-target_link_libraries(qwt PUBLIC Qt5::Core Qt5::Svg Qt5::Widgets)
+target_link_libraries(qwt PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
 
 include(GNUInstallDirs)
 install(TARGETS qwt
