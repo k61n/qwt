@@ -19,14 +19,26 @@ ubuntu24.04:
     - cmake .. -DCMAKE_BUILD_TYPE=Release
     - cmake --build .
 
-macos-arm64:
+macos-qt5-arm64:
   stage: build
   tags:
     - darwin, arm64, ventura
   script:
     - mkdir build && cd build
     - /opt/homebrew/bin/cmake ..
-      -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt@5
+      -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5;/opt/homebrew/opt/qt"
+      -DPREFER_QT=5
+    - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
+
+macos-qt6-arm64:
+  stage: build
+  tags:
+    - darwin, arm64, ventura
+  script:
+    - mkdir build && cd build
+    - /opt/homebrew/bin/cmake ..
+      -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5;/opt/homebrew/opt/qt"
+      -DPREFER_QT=6
     - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
 
 win-x64:
