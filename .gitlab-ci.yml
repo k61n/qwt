@@ -9,11 +9,11 @@ ubuntu18.04:
     - cmake .. -DCMAKE_BUILD_TYPE=Release
     - cmake --build .
 
-ubuntu22.04:
+ubuntu24.04:
   stage: build
   only:
     - branches
-  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/jammy:0.0.10
+  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/noble:0.0.1
   script:
     - mkdir build && cd build
     - cmake .. -DCMAKE_BUILD_TYPE=Release
