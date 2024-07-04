@@ -23,7 +23,8 @@ else ()
         set(V 5)
     endif ()
 endif ()
-message("-- Found Qt${V}")
+get_target_property(QT_LIB_PATH Qt${V}::Core LOCATION)
+message(STATUS "Found Qt${V}Core: ${QT_LIB_PATH}")
 
 set(SOURCES
     src/qwt_abstract_scale_draw.cpp
