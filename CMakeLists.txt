@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-project(qwt)
+
+project(qwt VERSION 5.2.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -165,16 +166,27 @@ set(HEADERS
     src/qwt_wheel.h
     src/qwt.h)
 
-add_library(qwt ${SOURCES} ${HEADERS})
-target_include_directories(qwt PUBLIC ${Qt5Core_INCLUDE_DIRS} ${Qt5Svg_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
-target_link_libraries(qwt PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
+add_library(qwt_static STATIC ${SOURCES} ${HEADERS})
+set_target_properties(qwt_static PROPERTIES
+    OUTPUT_NAME "qwt")
+target_link_libraries(qwt_static PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
+
+if (BUILD_SHARED_LIBS)
+    add_library(qwt SHARED $<TARGET_OBJECTS:qwt_static>)
+    set_target_properties(qwt PROPERTIES
+        VERSION ${qwt_VERSION}
+        SOVERSION ${qwt_VERSION_MAJOR}
+        OUTPUT_NAME "qwt")
+    target_link_libraries(qwt PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
+endif ()
 
 include(GNUInstallDirs)
-install(TARGETS qwt
-    EXPORT qwtTargets
+install(TARGETS qwt_static
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+if (BUILD_SHARED_LIBS)
+    install(TARGETS qwt
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif ()
 install(FILES ${HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qwt)
