@@ -1,0 +1,144 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  linux:
+    name: linux
+    runs-on: ${{ matrix.os }}
+    needs: release
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-24.04]
+        include:
+          - os: ubuntu-20.04
+            deps: qtbase5-dev libqt5svg5-dev
+            qt: 5.12.8
+          - os: ubuntu-24.04
+            deps: qt6-base-dev libqt6svg6-dev
+            qt: 6.4.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install ${{ matrix.deps }} -y
+      - name: cmake
+        shell: bash
+        run: |
+          mkdir install
+          mkdir build
+          cmake . -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="install/qwt"
+          cmake --build build --parallel $(nproc)
+          cmake --install build
+          cd install
+          tar -cvf qwt_linux_qt${{ matrix.qt }}.tar qwt
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: install/qwt_linux_qt${{ matrix.qt }}.tar
+          asset_name: qwt_linux_qt${{ matrix.qt }}.tar
+          asset_content_type: application/octet-stream
+
+  windows:
+    name: windows
+    runs-on: ${{ matrix.os }}
+    needs: release
+    strategy:
+      matrix:
+        os: [windows-2019, windows-latest]
+        include:
+          - os: windows-2019
+            mingw: win64_mingw81
+            qt: 5.15.2
+          - os: windows-latest
+            mingw: win64_mingw
+            qt: 6.2.4
+    steps:
+      - name: deps
+        uses: jurplel/install-qt-action@v4
+        with:
+          version:      ${{ matrix.qt }}
+          host:         windows
+          target:       desktop
+          arch:         ${{ matrix.mingw }}
+          setup-python: false
+      - uses: actions/checkout@v4
+      - name: cmake
+        shell: pwsh
+        run: |
+          mkdir install
+          mkdir build
+          cmake.exe . -G "MinGW Makefiles" -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="install/qwt"
+          cmake.exe --build build --parallel $env:NUMBER_OF_PROCESSORS
+          cmake.exe --install build
+          Compress-Archive -Path install/qwt -DestinationPath qwt_windows_qt${{ matrix.qt }}.zip
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: qwt_windows_qt${{ matrix.qt }}.zip
+          asset_name: qwt_windows_qt${{ matrix.qt }}.zip
+          asset_content_type: application/octet-stream
+
+  macos:
+    name: macos
+    runs-on: ${{ matrix.os }}
+    needs: release
+    strategy:
+      matrix:
+        os: [macos-13, macos-latest]
+        qt: [qt@5, qt]
+        include:
+          - os: macos-13
+            arch: intel
+          - os: macos-latest
+            arch: arm
+    steps:
+      - name: deps
+        shell: bash
+        run: |
+          brew install ${{ matrix.qt }}
+      - uses: actions/checkout@v4
+      - name: cmake
+        shell: bash
+        run: |
+          QT_VERSION=$($(brew --prefix ${{ matrix.qt }})/bin/qmake -v | sed -n 's/.*Using Qt version \([0-9.]*\).*/\1/p')
+          echo "QT_VERSION=${QT_VERSION}" >> $GITHUB_ENV
+          mkdir install
+          mkdir build
+          cmake . -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_PREFIX_PATH="$(brew --prefix ${{ matrix.qt }})" -DCMAKE_INSTALL_PREFIX="install/qwt"
+          cmake --build build --parallel $(sysctl -n hw.ncpu)
+          cmake --install build
+          cd install
+          tar -cvf qwt_macos_${{ matrix.arch }}_qt${QT_VERSION}.tar qwt
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: install/qwt_macos_${{ matrix.arch }}_qt${{ env.QT_VERSION }}.tar
+          asset_name: qwt_macos_${{ matrix.arch }}_qt${{ env.QT_VERSION }}.tar
+          asset_content_type: application/octet-stream
