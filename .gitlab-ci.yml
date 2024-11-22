@@ -1,56 +1,46 @@
 stages:
   - build
 
-ubuntu18.04:
+linux:
   stage: build
-  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/bionic:0.0.11
+  parallel:
+    matrix:
+      - IMAGE: ["ubuntu20.04:0.0.2", "noble:0.0.3"]
+  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/$IMAGE
   script:
     - mkdir build && cd build
     - cmake .. -DCMAKE_BUILD_TYPE=Release
-    - cmake --build .
+    - cmake --build . --parallel $CI_NPROC
 
-ubuntu24.04:
-  stage: build
-  only:
-    - branches
-  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/noble:0.0.1
-  script:
-    - mkdir build && cd build
-    - cmake .. -DCMAKE_BUILD_TYPE=Release
-    - cmake --build .
-
-macos-qt5-arm64:
+macos-arm64:
   stage: build
   tags:
     - darwin, arm64, ventura
+  parallel:
+    matrix:
+      - QT: ["qt", "qt@5 -DPREFER_QT=5"]
   script:
     - mkdir build && cd build
     - /opt/homebrew/bin/cmake ..
-      -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5;/opt/homebrew/opt/qt"
-      -DPREFER_QT=5
-    - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
-
-macos-qt6-arm64:
-  stage: build
-  tags:
-    - darwin, arm64, ventura
-  script:
-    - mkdir build && cd build
-    - /opt/homebrew/bin/cmake ..
-      -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5;/opt/homebrew/opt/qt"
-      -DPREFER_QT=6
+      -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/$QT
     - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
 
 win-x64:
   stage: build
   tags:
     - win, x64
+  parallel:
+    matrix:
+      - QT: "5.15.2/mingw81_64"
+        MINGW: "mingw810_64"
+      - QT: "6.7.2/mingw_64"
+        MINGW: "mingw1120_64"
   script:
     - mkdir build
     - cd build
     - cmake.exe .. -G "Unix Makefiles"
-      -DCMAKE_MAKE_PROGRAM="C:/Qt/Tools/mingw810_64/bin/mingw32-make.exe"
-      -DCMAKE_C_COMPILER="C:/Qt/Tools/mingw810_64/bin/gcc.exe"
-      -DCMAKE_CXX_COMPILER="C:/Qt/Tools/mingw810_64/bin/g++.exe"
-      -DCMAKE_PREFIX_PATH="C:/Qt/5.15.2/mingw81_64"
+      -DCMAKE_MAKE_PROGRAM="C:/Qt/Tools/$MINGW/bin/mingw32-make.exe"
+      -DCMAKE_C_COMPILER="C:/Qt/Tools/$MINGW/bin/gcc.exe"
+      -DCMAKE_CXX_COMPILER="C:/Qt/Tools/$MINGW/bin/g++.exe"
+      -DCMAKE_PREFIX_PATH="C:/Qt/$QT"
     - cmake.exe --build . --parallel $env:NUMBER_OF_PROCESSORS
