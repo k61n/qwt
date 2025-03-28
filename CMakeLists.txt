@@ -166,26 +166,27 @@ set(HEADERS
     src/qwt_wheel.h
     src/qwt.h)
 
-add_library(qwt_static STATIC ${SOURCES} ${HEADERS})
-set_target_properties(qwt_static PROPERTIES
-    OUTPUT_NAME "qwt")
+add_definitions(-DQWT_MAKEDLL=1)
+
+add_library(qwt_static STATIC ${SOURCES})
+if (MSVC AND BUILD_SHARED_LIBS)
+    set_target_properties(qwt_static PROPERTIES OUTPUT_NAME "qwt_static")
+else ()
+    set_target_properties(qwt_static PROPERTIES OUTPUT_NAME "qwt")
+endif ()
 target_link_libraries(qwt_static PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
 
 if (BUILD_SHARED_LIBS)
-    add_library(qwt SHARED $<TARGET_OBJECTS:qwt_static>)
-    set_target_properties(qwt PROPERTIES
-        VERSION ${qwt_VERSION}
-        SOVERSION ${qwt_VERSION_MAJOR}
-        OUTPUT_NAME "qwt")
-    target_link_libraries(qwt PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
+    add_library(qwt_shared SHARED $<TARGET_OBJECTS:qwt_static>)
+    set_target_properties(qwt_shared PROPERTIES OUTPUT_NAME "qwt")
+    target_link_libraries(qwt_shared PUBLIC Qt${V}::Core Qt${V}::Svg Qt${V}::Widgets)
 endif ()
 
 include(GNUInstallDirs)
 install(TARGETS qwt_static
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 if (BUILD_SHARED_LIBS)
-    install(TARGETS qwt
+    install(TARGETS qwt_shared
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif ()
 install(FILES ${HEADERS}
