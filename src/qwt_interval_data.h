@@ -20,13 +20,6 @@
 #include <string.h>
 #endif
 
-#if defined(QWT_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QwtArray<QwtDoubleInterval>;
-template class QWT_EXPORT QwtArray<double>;
-// MOC_SKIP_END
-#endif
-
 /*!
   \brief Series of samples of a value and an interval
 

@@ -14,21 +14,6 @@
 #include <qmap.h>
 #include "qwt_dial.h"
 
-#if defined(QWT_TEMPLATEDLL)
-
-/*
-  Unfortunately Qt 4.0.0/Qt 4.0.1 contains uncompilable 
-  code in the STL adaptors of qmap.h. The declaration below 
-  instantiates this code resulting in compiler errors. 
-  If you really need the map to be exported, remove the condition above
-  and fix the qmap.h
-*/
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QMap<double, QString>;
-// MOC_SKIP_END
-
-#endif
-
 
 class QwtCompassRose;
 

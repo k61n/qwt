@@ -18,14 +18,6 @@
 
 #include <QPolygonF>
 
-// MOC_SKIP_BEGIN
-
-#if defined(QWT_TEMPLATEDLL)
-template class QWT_EXPORT QwtArray<double>;
-#endif
-
-// MOC_SKIP_END
-
 /*!
   \brief QwtData defines an interface to any type of curve data.
 

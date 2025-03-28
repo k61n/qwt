@@ -211,11 +211,4 @@ inline bool operator==(QwtEventPattern::KeyPattern b1,
     return b1.key == b2.key && b1.state == b2.state; 
 }
 
-#if defined(QWT_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QwtArray<QwtEventPattern::MousePattern>;
-template class QWT_EXPORT QwtArray<QwtEventPattern::KeyPattern>;
-// MOC_SKIP_END
-#endif
-
 #endif

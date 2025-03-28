@@ -20,12 +20,6 @@
 #include <qlist.h>
 #include <QPolygonF>
 
-#if defined(QWT_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QMap<double, QPolygonF>;
-// MOC_SKIP_END
-#endif
-
 class QwtScaleMap;
 
 /*!

@@ -19,30 +19,12 @@
 #define QWT_VERSION       0x050200
 #define QWT_VERSION_STR   "5.2.0"
 
-#if defined(Q_WS_WIN)
-
-#if defined(_MSC_VER) /* MSVC Compiler */
-/* template-class specialization 'identifier' is already instantiated */
-#pragma warning(disable: 4660)
-#endif // _MSC_VER
-
-#ifdef QWT_DLL
-
-#if defined(QWT_MAKEDLL)     // create a Qwt DLL library 
+#if defined(_MSC_VER) && defined(QWT_MAKEDLL)
 #define QWT_EXPORT  __declspec(dllexport)
-#define QWT_TEMPLATEDLL
-#else                        // use a Qwt DLL library
+#elif defined(_MSC_VER)
 #define QWT_EXPORT  __declspec(dllimport)
-#endif
-
-#endif // QWT_DLL
-
-#endif // Q_WS_WIN
-
-#ifndef QWT_EXPORT
+#else
 #define QWT_EXPORT
 #endif
-
-// #define QWT_NO_COMPAT 1 // disable withdrawn functionality
 
 #endif // QWT_GLOBAL_H

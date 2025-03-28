@@ -16,12 +16,6 @@
 #include "qwt_array.h"
 #include "qwt_double_interval.h"
 
-#if defined(QWT_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QWT_EXPORT QwtArray<double>;
-// MOC_SKIP_END
-#endif
-
 /*!
   \brief QwtColorMap is used to map values into colors. 
 
