@@ -5,42 +5,51 @@ linux:
   stage: build
   parallel:
     matrix:
-      - IMAGE: ["ubuntu20.04:0.0.2", "noble:0.0.3"]
+      - IMAGE: [ubuntu20.04:0.0.5, noble:0.0.6]
   image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/$IMAGE
   script:
     - mkdir build && cd build
-    - cmake .. -DCMAKE_BUILD_TYPE=Release
+    - cmake ..
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_SHARED_LIBS=ON
     - cmake --build . --parallel $CI_NPROC
 
 macos-arm64:
   stage: build
   tags:
     - darwin, arm64, ventura
-  parallel:
-    matrix:
-      - QT: ["qt", "qt@5 -DPREFER_QT=5"]
   script:
     - mkdir build && cd build
-    - /opt/homebrew/bin/cmake ..
-      -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/$QT
-    - /opt/homebrew/bin/cmake --build . --parallel $(sysctl -n hw.ncpu)
+    - cmake ..
+      -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt
+      -DBUILD_SHARED_LIBS=ON
+      -DCMAKE_BUILD_TYPE=Release
+    - cmake --build . --parallel $(sysctl -n hw.ncpu)
 
-win-x64:
+windows:
   stage: build
-  tags:
-    - win, x64
   parallel:
     matrix:
-      - QT: "5.15.2/mingw81_64"
-        MINGW: "mingw810_64"
-      - QT: "6.7.2/mingw_64"
-        MINGW: "mingw1120_64"
+      - QT: 6.8.2/mingw_64
+        CMPLR: mingw1310_64
+        ARCH: x64
+        CMAKECONFIG: -GNinja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release
+        CMAKEBUILD: --parallel
+      - QT: 6.8.2/msvc2022_arm64
+        CMPLR: msvc2022_arm64
+        ARCH: arm64
+        CMAKECONFIG: -DUNUSED=OFF
+        CMAKEBUILD: --config Release -j
+  tags:
+    - win, $ARCH
   script:
     - mkdir build
     - cd build
-    - cmake.exe .. -G "Unix Makefiles"
-      -DCMAKE_MAKE_PROGRAM="C:/Qt/Tools/$MINGW/bin/mingw32-make.exe"
-      -DCMAKE_C_COMPILER="C:/Qt/Tools/$MINGW/bin/gcc.exe"
-      -DCMAKE_CXX_COMPILER="C:/Qt/Tools/$MINGW/bin/g++.exe"
+    - $env:Path = "C:\Qt\Tools\$CMPLR\bin;" + $env:Path
+    - $CMAKECONFIGARGS = $CMAKECONFIG -split ' '
+    - $CMAKEBUILDARGS = $CMAKEBUILD -split ' '
+    - cmake ..
+      @CMAKECONFIGARGS
+      -DBUILD_SHARED_LIBS=ON
       -DCMAKE_PREFIX_PATH="C:/Qt/$QT"
-    - cmake.exe --build . --parallel $env:NUMBER_OF_PROCESSORS
+    - cmake --build . @CMAKEBUILDARGS $env:NUMBER_OF_PROCESSORS
