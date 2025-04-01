@@ -166,7 +166,10 @@ set(HEADERS
     src/qwt_wheel.h
     src/qwt.h)
 
-add_definitions(-DQWT_MAKEDLL=1)
+if (MSVC)
+    add_definitions(-DQWT_MAKEDLL=1)
+    add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+endif ()
 
 add_library(qwt_static STATIC ${SOURCES})
 if (MSVC AND BUILD_SHARED_LIBS)
