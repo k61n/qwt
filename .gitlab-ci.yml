@@ -5,7 +5,7 @@ linux:
   stage: build
   parallel:
     matrix:
-      - IMAGE: [ubuntu20.04:0.0.5, noble:0.0.6]
+      - IMAGE: [debian11:0.0.5, noble:0.0.6]
   image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/$IMAGE
   script:
     - mkdir build && cd build
