@@ -1,0 +1,3 @@
+usr/include/qwt
+usr/lib/*/libqwt.so
+usr/lib/*/libqwt*.a

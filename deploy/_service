@@ -1,0 +1,23 @@
+<services>
+  <service name="tar_scm">
+    <param name="scm">git</param>
+    <param name="url">https://github.com/k61n/qwt</param>
+    <param name="revision">tags/6.3.0</param>
+    <param name="version">fixed</param>
+    <param name="package-meta">no</param>
+  </service>
+  <service name="recompress">
+    <param name="file">*fixed.tar</param>
+    <param name="compression">gz</param>
+  </service>
+  <service name="extract_file">
+    <param name="archive">*qwt-fixed.tar.gz</param>
+    <param name="files">*/deploy/rpm/qwt.spec</param>
+    <param name="files">*/deploy/deb/debian.*</param>
+    <param name="files">*/deploy/deb/libqwt*</param>
+  </service>
+  <service name="set_version">
+    <param name="version">6.3.0</param>
+  </service>
+  <service name="download_files"/>
+</services>

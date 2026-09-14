@@ -1,0 +1,21 @@
+Source: libqwt
+Maintainer: Konstantin Kholostov <k.kholostov@fz-juelich.de>
+Section: libs
+Priority: optional
+Build-Depends:
+ debhelper (>= 11)
+Standards-Version: 3.9.5
+
+Package: libqwt
+Architecture: any
+Section: libs
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Qwt is a graphics extension to the Qt GUI application framework.
+ It provides a 2D plotting widget and more.
+
+Package: libqwt-dev
+Architecture: any
+Section: libdevel
+Depends: libqwt (= ${binary:Version}), ${misc:Depends}
+Description: Qwt development files
+ Development headers and files for the Qwt graphics extension to Qt.

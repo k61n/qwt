@@ -1,0 +1,36 @@
+stages:
+  - sync
+  - obs
+
+sync:
+  stage: sync
+  variables:
+    GIT_DEPTH: 0
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_PROJECT_ID == "2912"
+  image: alpine/git
+  script:
+    - git fetch origin jcns develop
+    - git remote add mirror https://$GITHUB_TOKEN@github.com/k61n/qwt.git
+    - git fetch mirror
+    - git push -f mirror origin/jcns:refs/heads/jcns
+    - git push -f mirror origin/develop:refs/heads/develop
+    - tags=$(git ls-remote --tags mirror | awk -F/ '{print $NF}'); [ -z "$tags" ] || git push -f mirror --delete $tags
+    - git push mirror --tags
+
+obs-release:
+  stage: obs
+  image: iffregistry.fz-juelich.de/qtisas/qtisas-ci/util:18
+  only:
+    - tags@qtisas/qwt
+  script:
+    - cd ..
+    - echo "user=$OBS_USER" | tee -a /etc/osc/oscrc >/dev/null
+    - echo "pass=$OBS_TOKEN" | tee -a /etc/osc/oscrc >/dev/null
+    - mkdir -p ~/.config/osc
+    - ln -s /etc/osc/oscrc ~/.config/osc
+    - osc co $OBS_PROJECT
+    - rm -rf $OBS_PROJECT/*
+    - cp $CI_PROJECT_DIR/deploy/_service $OBS_PROJECT
+    - osc commit $OBS_PROJECT/_service -m "$CI_COMMIT_TAG"
+  allow_failure: true
